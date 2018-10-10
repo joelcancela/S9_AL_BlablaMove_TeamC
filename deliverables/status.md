@@ -10,7 +10,7 @@ Planned for the next week : Walking skeleton
 
 Status flag: Green
 Achieved: Defined scenarios to implement, we looked deeper into the architecture
-Walking skeleton delayed to week 42
+Walking skeleton delayed to week 41
 
 ## Week 41: 8-14 October 2018
 
