@@ -16,3 +16,9 @@
 
 - Status flag: Green
 - Achieved: Composant diagram, roadmap
+
+## Week 42: 15-21 October 2018
+
+- Status flag: Orange
+- Maybe spent too much time design the architecture
+- Achieved: TBA
