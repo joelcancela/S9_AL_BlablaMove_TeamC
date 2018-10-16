@@ -7,7 +7,7 @@ import {setTheme} from 'ngx-bootstrap';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Is Uberoo down ?';
+  title = 'Is BlablaMove down ?';
   data = [
     {
       'name': 'Reports',
