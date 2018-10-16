@@ -1,0 +1,30 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div style="text-align:center">
+  <h1>
+    {{ title }}
+  </h1>
+  <div class="container">
+    <p>
+      Deliveroo is on a mission to transform the way you order food.<br/>We partner with the best restaurants in the
+      business
+      – from local hotspots to national favourites – and bring you the food you love, right to your door.
+    </p>
+    <div class="alert alert-success">
+      No problems at Uberoo
+    </div>
+    <ngx-charts-line-chart [results]="data" [view]="view"
+                           [scheme]="colorScheme"
+                           [gradient]="gradient"
+                           [xAxis]="showXAxis"
+                           [yAxis]="showYAxis"
+                           [legend]="showLegend"
+                           [showXAxisLabel]="showXAxisLabel"
+                           [showYAxisLabel]="showYAxisLabel"
+                           [yAxisLabel]="yAxisLabel"
+                           [autoScale]="autoScale"
+                           [yScaleMin]="yScaleMin"
+                           [yScaleMax]="yScaleMax"
+                           [timeline]="timeline"></ngx-charts-line-chart>
+    <a class="btn btn-danger"><i class="fas fa-thumbs-down"></i> I have a problem with Uberoo</a>
+  </div>
+</div>
