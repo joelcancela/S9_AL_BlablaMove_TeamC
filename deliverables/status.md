@@ -21,4 +21,4 @@
 
 - Status flag: Orange
 - Maybe spent too much time design the architecture
-- Achieved: TBA
+- Achieved: Redesigned architecture, started to develop (2 front-ends + Kafka + minimal back-end Spring)

@@ -7,7 +7,7 @@ import {DashboardApiService} from './service/dashboard-api.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'Uberoo\'s Admin Dashboard';
+  title = 'BlablaMove\'s Admin Dashboard';
 
   constructor(private dashboardService: DashboardApiService) {
     this.dashboardService.showMessage();
