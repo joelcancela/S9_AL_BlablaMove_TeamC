@@ -7,6 +7,8 @@ import { MarketingComponent } from './marketing/marketing.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 
+import {AngularOpenlayersModule} from 'ngx-openlayers';
+
 const appRoutes: Routes= [
   { path: '', component: AppComponent},
   { path: 'marketing', component: MarketingComponent},
@@ -24,7 +26,8 @@ const appRoutes: Routes= [
     RouterModule.forRoot(
       appRoutes,
       {enableTracing: true}
-    )
+    ),
+    AngularOpenlayersModule
   ],
   providers: [],
   bootstrap: [AppComponent]
