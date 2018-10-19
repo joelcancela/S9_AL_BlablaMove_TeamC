@@ -10,19 +10,6 @@
     <div class="alert alert-success">
       No problems at BlablaMove
     </div>
-    <ngx-charts-line-chart [results]="data" [view]="view"
-                           [scheme]="colorScheme"
-                           [gradient]="gradient"
-                           [xAxis]="showXAxis"
-                           [yAxis]="showYAxis"
-                           [legend]="showLegend"
-                           [showXAxisLabel]="showXAxisLabel"
-                           [showYAxisLabel]="showYAxisLabel"
-                           [yAxisLabel]="yAxisLabel"
-                           [autoScale]="autoScale"
-                           [yScaleMin]="yScaleMin"
-                           [yScaleMax]="yScaleMax"
-                           [timeline]="timeline"></ngx-charts-line-chart>
-    <a class="btn btn-danger"><i class="fas fa-thumbs-down"></i> I have a problem with BlablaMove</a>
+    <app-reporting></app-reporting>
   </div>
 </div>
