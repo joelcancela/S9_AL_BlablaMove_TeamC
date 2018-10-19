@@ -9,7 +9,7 @@ import {Observable} from 'rxjs';
 })
 export class BlablaMoveStatusAPIService {
 
-  API_URL = 'localhost:8080/publicstatus';
+  API_URL = 'http://localhost:8080/publicstatus';
   GET_LAST_REPORTS = this.API_URL + '/last24hIncidents';
   REPORT_ISSUE = this.API_URL + '/reportIssue';
 
