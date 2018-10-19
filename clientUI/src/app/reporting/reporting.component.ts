@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {BlablaMoveStatusAPIService} from '../service/blablamove-status-api.service';
+import {forEach} from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-reporting',
@@ -8,8 +9,18 @@ import {BlablaMoveStatusAPIService} from '../service/blablamove-status-api.servi
 })
 export class ReportingComponent implements OnInit {
 
+  timeOptions = {hour: '2-digit', minute: '2-digit'};
   // ngx-charts-line-chart options
-  data: object;
+  data = [
+    {
+      'name': 'Reports',
+      'series': [
+        {
+          'name': '00h00',
+          'value': 7
+        }
+      ]
+    }];
   view: any[] = [700, 400];
   showXAxis = true;
   showYAxis = true;
@@ -24,135 +35,53 @@ export class ReportingComponent implements OnInit {
   colorScheme = {
     domain: ['#001acc', '#a10a28']
   };
-  autoScale = true;  // line, area
+  autoScale = true;
+  lastHourProblems = 0;
+
+  // line, area
   constructor(private apiService: BlablaMoveStatusAPIService) {
   }
 
   ngOnInit() {
-    this.apiService.getLastReports().subscribe(response => console.log(response));
+    this.apiService.getLastReports().subscribe(response => this.adaptData(response));
+  }
+
+  formatDate(dateString) {
+    const date = new Date(dateString);
+    if (date.getDate() === new Date().getDate() - 1) {
+      return 'Hier, ' + date.toLocaleTimeString('fr-FR', this.timeOptions);
+    } else {
+      return date.toLocaleTimeString('fr-FR', this.timeOptions);
+    }
+  }
+
+  adaptData(response) {
+    const reFirst = new RegExp('first', 'g');
+    const reSecond = new RegExp('second', 'g');
+    const adaptedResponse = JSON.stringify(response).replace(reFirst, 'name').replace(reSecond, 'value');
+    const adaptedObject = JSON.parse(adaptedResponse);
+    adaptedObject.reverse();
+    adaptedObject.map(obj => obj.name = this.formatDate(obj.name));
+    const avg = Math.round(adaptedObject.reduce((total, obj) => total + obj.value, 0) / adaptedObject.length);
+    this.lastHourProblems = adaptedObject[adaptedObject.length - 1].value;
     this.data = [
       {
         'name': 'Reports',
-        'series': [
-          {
-            'name': '00h00',
-            'value': 7
-          },
-          {
-            'name': '01h00',
-            'value': 5
-          },
-          {
-            'name': '02h00',
-            'value': 2
-          },
-          {
-            'name': '03h00',
-            'value': 0
-          },
-          {
-            'name': '04h00',
-            'value': 1
-          },
-          {
-            'name': '05h00',
-            'value': 4
-          },
-          {
-            'name': '06h00',
-            'value': 5
-          },
-          {
-            'name': '07h00',
-            'value': 2
-          },
-          {
-            'name': '08h00',
-            'value': 4
-          },
-          {
-            'name': '09h00',
-            'value': 0
-          },
-          {
-            'name': '10h00',
-            'value': 8
-          },
-          {
-            'name': '11h00',
-            'value': 1
-          },
-          {
-            'name': '12h00',
-            'value': 2
-          },
-          {
-            'name': '13h00',
-            'value': 2
-          },
-          {
-            'name': '14h00',
-            'value': 4
-          },
-          {
-            'name': '15h00',
-            'value': 5
-          },
-          {
-            'name': '16h00',
-            'value': 7
-          },
-          {
-            'name': '17h00',
-            'value': 4
-          },
-          {
-            'name': '18h00',
-            'value': 7
-          },
-          {
-            'name': '19h00',
-            'value': 0
-          },
-          {
-            'name': '20h00',
-            'value': 1
-          },
-          {
-            'name': '21h00',
-            'value': 2
-          },
-          {
-            'name': '22h00',
-            'value': 1
-          },
-          {
-            'name': '23h00',
-            'value': 3
-          }
-        ]
+        'series': adaptedObject
       },
       {
-        'name': 'Avg.',
-        'series': [
-          {
-            'name': '00h00',
-            'value': 6
-          },
-          {
-            'name': '12h00',
-            'value': 6
-          },
-          {
-            'name': '23h00',
-            'value': 6
-          }
-        ]
-      }
-    ];
+        'name': 'Average',
+        'series': [{
+          'name': adaptedObject[0].name,
+          'value': avg
+        }, {
+          'name': adaptedObject[adaptedObject.length - 1].name,
+          'value': avg
+        }]
+      }];
   }
 
-  reportProblem() {
+  reportProblem() {// TODO: implement in backend
     this.apiService.postIssue();
   }
 
