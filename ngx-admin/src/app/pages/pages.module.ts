@@ -7,6 +7,7 @@ import { ThemeModule } from '../@theme/theme.module';
 import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import {MarketingComponent} from './marketing/marketing.component';
 import {AdminComponent} from './admin/admin.component';
+import {MarketingModule} from './marketing/marketing.module';
 
 
 const PAGES_COMPONENTS = [
@@ -19,6 +20,7 @@ const PAGES_COMPONENTS = [
     ThemeModule,
     DashboardModule,
     MiscellaneousModule,
+    MarketingModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,
