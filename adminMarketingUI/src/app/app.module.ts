@@ -7,8 +7,7 @@ import { MarketingComponent } from './marketing/marketing.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AdminComponent } from './admin/admin.component';
 
-const appRoutes: Routes= [
-  { path: '', component: AppComponent},
+const appRoutes: Routes = [
   { path: 'marketing', component: MarketingComponent},
   { path: 'admin', component: AdminComponent},
 ];
