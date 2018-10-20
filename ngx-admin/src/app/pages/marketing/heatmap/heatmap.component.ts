@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {tileLayer, latLng, Layer, marker, icon, Map} from 'leaflet';
+import {tileLayer, latLng, Layer, marker, icon, Map, circle} from 'leaflet';
 
 @Component({
   selector: 'ngx-heatmap',
@@ -31,6 +31,13 @@ export class HeatmapComponent implements OnInit {
     },
   );
 
+  circle = circle([43.615746, 7.071054], {
+    color: 'red',
+    fillColor: '#f03',
+    fillOpacity: 0.5,
+    radius: 500,
+  })
+
   zoomend(map: Map) {
     const zoom = map.layer._tileZoom;
     this.markerw.iconSize = [0.48 * zoom, 0.48 * zoom];
@@ -57,6 +64,7 @@ export class HeatmapComponent implements OnInit {
 
   ngOnInit() {
     this.markers.push(this.markerw);
+    this.options.layers.push(this.circle);
   }
 
 }
