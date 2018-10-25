@@ -22,3 +22,9 @@
 - Status flag: Orange
 - Maybe spent too much time design the architecture
 - Achieved: Redesigned architecture, started to develop (2 front-ends + Kafka + minimal back-end Spring)
+
+## Week 43: 22-28 October 2018
+
+- Status flag: Green
+- Walking skeleton is close
+- Next: Keep developing and start integrating
