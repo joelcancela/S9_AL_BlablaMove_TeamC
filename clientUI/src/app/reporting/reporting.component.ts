@@ -81,8 +81,8 @@ export class ReportingComponent implements OnInit {
       }];
   }
 
-  reportProblem() {// TODO: implement in backend
-    this.apiService.postIssue();
+  reportProblem() {
+    this.apiService.postIssue().subscribe(response => console.log(response));
   }
 
 }
