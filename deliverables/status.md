@@ -34,3 +34,4 @@
 - Status flag: Green
 - A good chunk of the integration is done. The design of most of the data transiting in the message bus has been defined and are currently being worked on. 
 - Next: Be able to demo one of the feature required for the presentation
+- Frontend : Admin front needs a few adjustements
