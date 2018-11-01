@@ -1,12 +1,16 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {CityReport} from '../model/city-report';
+import {City} from '../model/city';
+import {ConstantService} from '../constants/constant.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardMarketingService {
 
-  API_URL = 'http://localhost:8080/marketing';
+  API_URL = this.constant.DASHBOARD_API_URL + '/marketing';
   GET_ACTIVE_CITIES = this.API_URL + '/cities';
   GET_MOST_ACTIVE_CITIES = this.API_URL + '/mostActiveCities';
 
@@ -16,14 +20,14 @@ export class DashboardMarketingService {
     }),
   };
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private constant: ConstantService) {
   }
 
-  getActiveCities() {
-    return this.http.get(this.GET_ACTIVE_CITIES, this.httpOptions);
+  getActiveCities(): Observable<City[]> {
+    return this.http.get<City[]>(this.GET_ACTIVE_CITIES, this.httpOptions);
   }
 
-  getMostActiveCities() {
-    return this.http.get(this.GET_MOST_ACTIVE_CITIES, this.httpOptions);
+  getMostActiveCities(): Observable<CityReport[]> {
+    return this.http.get<CityReport[]>(this.GET_MOST_ACTIVE_CITIES, this.httpOptions);
   }
 }

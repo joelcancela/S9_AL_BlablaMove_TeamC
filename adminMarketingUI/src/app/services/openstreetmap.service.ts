@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {OpenStreetMapInfo} from '../model/open-street-map-info';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +20,7 @@ export class OpenstreetmapService {
   constructor(private http: HttpClient) {
   }
 
-  getGPSCoordinates(city: string) {
-    return this.http.get(this.OPEN_STREET_MAP_URL + city + this.OPEN_STREET_MAP_ARGS, this.httpOptions);
+  getGPSCoordinates(city: string): Observable<OpenStreetMapInfo[]> {
+    return this.http.get<OpenStreetMapInfo[]>(this.OPEN_STREET_MAP_URL + city + this.OPEN_STREET_MAP_ARGS, this.httpOptions);
   }
 }

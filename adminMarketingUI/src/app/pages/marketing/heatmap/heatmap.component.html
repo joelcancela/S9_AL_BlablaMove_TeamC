@@ -1,9 +1,6 @@
 <nb-card>
-  <nb-card-header>Leaflet Maps</nb-card-header>
+  <nb-card-header>Most active cities</nb-card-header>
   <nb-card-body>
-    <button type="button"
-            class="btn btn-primary"
-            (click)="addMarker()">Add Marker</button>
-    <div leaflet [leafletOptions]="options" [leafletLayers]="markers" (leafletMapZoomEnd)="zoomend(this)"></div>
+    <div leaflet [leafletOptions]="options" [leafletLayers]="markers"></div>
   </nb-card-body>
 </nb-card>

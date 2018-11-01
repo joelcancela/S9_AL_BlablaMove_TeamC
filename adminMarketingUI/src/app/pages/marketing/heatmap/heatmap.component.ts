@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {tileLayer, latLng, Layer, marker, icon, Map, circle} from 'leaflet';
+import {OpenstreetmapService} from '../../../services/openstreetmap.service';
+import {DashboardMarketingService} from '../../../services/dashboard-marketing.service';
+import {CityReport} from '../../../model/city-report';
+import {City} from '../../../model/city';
 
 @Component({
   selector: 'ngx-heatmap',
@@ -8,63 +12,62 @@ import {tileLayer, latLng, Layer, marker, icon, Map, circle} from 'leaflet';
 })
 export class HeatmapComponent implements OnInit {
 
-  layer = tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 18, attribution: '...' });
+  layer = tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 18, attribution: '...'});
 
   options = {
     layers: [
       this.layer,
     ],
-    zoom: 10,
-    center: latLng({ lat: 43.700000, lng: 7.250000 }),
+    zoom: 8,
+    center: latLng({lat: 43.700000, lng: 7.100000}),
   };
 
   markers: Layer[] = [];
 
-  markerw = marker(
-    [43.700000, 7.250000],
-    {
-      icon: icon({
-        iconSize: [ 25, 41 ],
-        iconAnchor: [ 13, 41 ],
-        iconUrl: 'assets/marker/marker.png',
-      }),
-    },
-  );
-
-  circle = circle([43.615746, 7.071054], {
-    color: 'red',
-    fillColor: '#f03',
-    fillOpacity: 0.5,
-    radius: 500,
-  })
-
-  zoomend(map: Map) {
-    const zoom = map.layer._tileZoom;
-    this.markerw.iconSize = [0.48 * zoom, 0.48 * zoom];
+  constructor(private openStreetMapService: OpenstreetmapService, private marketingService: DashboardMarketingService) {
   }
-
-  addMarker() {
-    const newMarker = marker(
-      [ 43.700000, 7.250000 ],
-      {
-        icon: icon({
-          iconAnchor: [ 43.700000, 7.250000 ],
-          iconUrl: 'assets/marker/marker.png',
-        }),
-      },
-    );
-    this.markers.push(newMarker);
-  }
-
-  removeMarker() {
-    this.markers.pop();
-  }
-
-  constructor() { }
 
   ngOnInit() {
-    this.markers.push(this.markerw);
-    this.options.layers.push(this.circle);
+    const parentThis = this;
+    this.marketingService.getMostActiveCities().subscribe(cities => cities.forEach(function (cityReport) {
+      parentThis.addHeatmapForCity(cityReport);
+    }));
+    this.marketingService.getActiveCities().subscribe(cities => cities.forEach(function (city) {
+      parentThis.addMarkerForCity(city);
+    }));
+  }
+
+  addMarkerForCity(city: City) {
+    const parentThis = this;
+    this.openStreetMapService.getGPSCoordinates(city.name).subscribe(cityInfo => {
+      const cityFinalInfo = cityInfo[0]; // sale
+      const cityMarker = marker(
+        [cityFinalInfo.lat, cityFinalInfo.lon],
+        {
+          icon: icon({
+            iconSize: [25, 25],
+            iconAnchor: [25, 25],
+            iconUrl: 'assets/marker/marker.png',
+            zIndexOffset: 1000
+          }),
+        },
+      );
+      parentThis.markers.push(cityMarker);
+    });
+  }
+
+  addHeatmapForCity(cityReport: CityReport) {
+    const parentThis = this;
+    this.openStreetMapService.getGPSCoordinates(cityReport.city.name).subscribe(cityInfo => {
+      const cityFinalInfo = cityInfo[0]; // sale
+      const cityCircle = circle([cityFinalInfo.lat, cityFinalInfo.lon], {
+        color: 'red',
+        fillColor: '#f03',
+        fillOpacity: 0.5,
+        radius: cityReport.transactionCount * 5,
+      });
+      parentThis.markers.push(cityCircle);
+    });
   }
 
 }
