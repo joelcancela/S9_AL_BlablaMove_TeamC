@@ -48,7 +48,8 @@ export class ReportingComponent implements OnInit {
 
   formatDate(dateString) {
     const date = new Date(dateString);
-    if (date.getDate() === new Date().getDate() - 1) {
+    const yesterday = new Date(Date.now() - 86400000);
+    if (date.getDate() === yesterday.getDate()) {
       return 'Hier, ' + date.toLocaleTimeString('fr-FR', this.timeOptions);
     } else {
       return date.toLocaleTimeString('fr-FR', this.timeOptions);

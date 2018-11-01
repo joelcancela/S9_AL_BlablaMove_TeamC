@@ -8,6 +8,7 @@ import { MiscellaneousModule } from './miscellaneous/miscellaneous.module';
 import {MarketingComponent} from './marketing/marketing.component';
 import {AdminComponent} from './admin/admin.component';
 import {MarketingModule} from './marketing/marketing.module';
+import {NgxChartsModule} from '@swimlane/ngx-charts';
 
 
 const PAGES_COMPONENTS = [
@@ -21,6 +22,7 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     MiscellaneousModule,
     MarketingModule,
+    NgxChartsModule
   ],
   declarations: [
     ...PAGES_COMPONENTS,

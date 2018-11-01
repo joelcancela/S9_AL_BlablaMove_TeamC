@@ -1,3 +1,18 @@
-<p>
-  admin works!
-</p>
+<nb-card>
+  <nb-card-header>Visitors Analytics</nb-card-header>
+  <nb-card-body>
+    <ngx-charts-line-chart [results]="data" [view]="view"
+                           [scheme]="colorScheme"
+                           [gradient]="gradient"
+                           [xAxis]="showXAxis"
+                           [yAxis]="showYAxis"
+                           [legend]="showLegend"
+                           [showXAxisLabel]="showXAxisLabel"
+                           [showYAxisLabel]="showYAxisLabel"
+                           [yAxisLabel]="yAxisLabel"
+                           [autoScale]="autoScale"
+                           [yScaleMin]="yScaleMin"
+                           [yScaleMax]="yScaleMax"
+                           [timeline]="timeline"></ngx-charts-line-chart>
+  </nb-card-body>
+</nb-card>

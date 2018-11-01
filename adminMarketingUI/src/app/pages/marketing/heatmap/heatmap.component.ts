@@ -48,7 +48,7 @@ export class HeatmapComponent implements OnInit {
             iconSize: [25, 25],
             iconAnchor: [25, 25],
             iconUrl: 'assets/marker/marker.png',
-            zIndexOffset: 1000
+            zIndexOffset: 1000,
           }),
         },
       );
