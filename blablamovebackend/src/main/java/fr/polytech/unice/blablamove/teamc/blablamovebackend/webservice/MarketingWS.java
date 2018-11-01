@@ -1,5 +1,7 @@
-package fr.polytech.unice.blablamove.teamc.blablamovebackend;
+package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;

@@ -1,37 +1,6 @@
 version: "2.1"
 
 services:
-  adminMarketingUI:
-    container_name: al_adminMarketingUI
-    image: "al/fe/admin_marketing_ui"
-    ports:
-      - "8080:80"
-    expose:
-      - "8080"
-    restart: always
-    links:
-      - dashboardService
-  clientUI:
-    container_name: al_clientUI
-    image: "al/fe/client_ui"
-    ports:
-      - "8081:80"
-    expose:
-      - "8081"
-    restart: always
-    links:
-      - dashboardService
-  dashboardService:
-    container_name: al_dashboardService
-    image: "al/ws/dashboardservice"
-    ports:
-      - "9555:8080"
-    expose:
-      - "9555"
-    restart: always
-    links:
-      - kafka
-
   zookeeper:
     image: wurstmeister/zookeeper
     ports:

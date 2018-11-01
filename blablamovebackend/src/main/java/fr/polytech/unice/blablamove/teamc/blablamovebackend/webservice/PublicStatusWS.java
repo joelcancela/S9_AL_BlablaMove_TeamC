@@ -1,4 +1,4 @@
-package fr.polytech.unice.blablamove.teamc.blablamovebackend;
+package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.ReportIssueRequest;
 import org.springframework.data.util.Pair;

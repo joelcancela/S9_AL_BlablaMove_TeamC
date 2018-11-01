@@ -1,6 +1,7 @@
 package fr.polytech.unice.blablamove.teamc.blablamovebackend.config;
 
 import kafka.consumer.Consumer;
+import kafka.producer.Sender;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,14 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 	public Consumer messageConsumer() {
 		return new Consumer();
 	}
+
+	@Bean
+	@Primary
+	public Sender messageProducer() {
+		return new Sender();
+	}
+
+
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 

@@ -1,4 +1,4 @@
-package fr.polytech.unice.blablamove.teamc.blablamovebackend;
+package fr.polytech.unice.blablamove.teamc.blablamovebackend.model;
 
 public class City {
     private String name;
