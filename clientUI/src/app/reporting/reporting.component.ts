@@ -37,6 +37,7 @@ export class ReportingComponent implements OnInit {
   };
   autoScale = true;
   lastHourProblems = 0;
+  lastUpdate = null;
 
   // line, area
   constructor(private apiService: BlablaMoveStatusAPIService) {
@@ -44,6 +45,7 @@ export class ReportingComponent implements OnInit {
 
   ngOnInit() {
     this.apiService.getLastReports().subscribe(response => this.adaptData(response));
+    this.apiService.getLastUpdate().subscribe(response => this.lastUpdate = this.formatDate(response));
   }
 
   formatDate(dateString) {
