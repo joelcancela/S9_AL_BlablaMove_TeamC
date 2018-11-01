@@ -32,8 +32,13 @@ public class PublicStatusWS {
     @RequestMapping(path ="/reportIssue", method = RequestMethod.POST)
     public boolean reportIssue(@RequestBody ReportIssueRequest uuid){
         System.out.println("User "+uuid+" reported an issue");
-        //TODO: check uuid for spam
-        //TODO: add issue to db
+        //TODO: check uuid for spam + add issue to db
         return true;
+    }
+
+    @RequestMapping(path ="/lastUpdate", method = RequestMethod.GET)
+    public LocalDateTime getLastUpdate(){
+        //TODO: retrieve last update from db
+        return LocalDateTime.now().minusMinutes(15);
     }
 }

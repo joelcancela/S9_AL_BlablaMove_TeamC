@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/marketing")
@@ -16,6 +18,7 @@ public class MarketingWS {
     private List<City> cities = new ArrayList<>();
     private List<CityReport> citiesReports = new ArrayList<>();
 
+    //TODO: get data from DB
     public MarketingWS() {
         City marseille = new City("Marseille");
         City antibes = new City("Antibes");
@@ -42,6 +45,7 @@ public class MarketingWS {
 
     @RequestMapping(path = "/mostActiveCities",method =  RequestMethod.GET)
     public List<CityReport> getMostActiveCitiesAllTime() {
-        return citiesReports;
+        return citiesReports.stream().sorted((f1,f2) -> Integer.compare(f2.getTransactionCount(),
+                f1.getTransactionCount())).collect(Collectors.toCollection(LinkedList::new));
     }
 }
