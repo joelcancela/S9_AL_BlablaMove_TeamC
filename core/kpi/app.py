@@ -18,7 +18,7 @@ from kafka import KafkaProducer
 
 from message.factory import make_kafka_message
 
-__product__ = "Core Delivery"
+__product__ = "Core KPI"
 __author__ = "Nikita ROUSSEAU"
 __copyright__ = "Copyright 2018, Polytech Nice Sophia"
 __credits__ = ["Nikita Rousseau"]
@@ -41,31 +41,6 @@ threads = []
 threads_mq = {}
 # CLEAN EXIT EVENT
 t_stop_event = threading.Event()
-
-# Fake database
-# 20 cities
-cities = {
-    0: 'New York',
-    1: 'Los Angeles',
-    2: 'Chicago',
-    3: 'Houston',
-    4: 'Philadelphia',
-    5: 'Phoenix',
-    6: 'San Antonio',
-    7: 'San Diego',
-    8: 'Dallas',
-    9: 'San Jose',
-    10: 'Austin',
-    11: 'Jacksonville',
-    12: 'San Francisco',
-    13: 'Indianapolis',
-    14: 'Columbus',
-    15: 'Fort Worth',
-    16: 'Charlotte',
-    17: 'Detroit',
-    18: 'El Paso',
-    19: 'Seattle'
-}
 
 
 def __sigint_handler(signal, frame):
@@ -116,58 +91,24 @@ def status_route():
 
 
 ########################################################################################################################
-# CORE DELIVERY SERVICE ROUTES
+# CORE KPI SERVICE ROUTES
 ########################################################################################################################
 
-@app.route("/delivery",
-           methods=['POST'])
-def post_delivery_route():
+@app.route("/kpi/city/top10",
+           methods=['GET'])
+def get_kpi_city_top10_route():
     """
-    Create a new delivery
+    Ask the system the most active cities by initiated deliveries
     :return:
     """
     # Build message
     message, request_id = make_kafka_message(
-        action='DELIVERY_INITIATED',
-        message={
-            'delivery_id': randint(1, 9999),
-            'city': cities[randint(0, 19)],
-            'date': str(datetime.datetime.now())
-        }
+        action='KPI_CITY_TOP10_BROADCAST',
+        message={}
     )
 
     # Send
-    threads_mq['delivery'].put(message)
-
-    # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
-
-
-@app.route("/delivery/checkpoint",
-           methods=['POST'])
-def post_delivery_checkpoint_route():
-    """
-    Notify that the delivery has reached a checkpoint
-    :return:
-    """
-    # Build message
-    is_final_destination = False
-    if randint(0, 1) > 0:
-        is_final_destination = True
-    message, request_id = make_kafka_message(
-        action='DELIVERY_CHECKPOINT',
-        message={
-            'delivery_id': randint(1, 9999),
-            'city': cities[randint(0, 19)],
-            'date': str(datetime.datetime.now()),
-            'isFinalDestination': is_final_destination
-        }
-    )
-
-    # Send
-    threads_mq['delivery'].put(message)
+    threads_mq['kpi'].put(message)
 
     # Response with callback url
     return jsonify({
