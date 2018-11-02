@@ -18,6 +18,10 @@ Put this entry in your hosts file to test Kafka locally:
 mvn spring-boot:run
 ```
 
+How to start a local influxdb :
+```bash
+docker run -e INFLUXDB_ADMIN_ENABLED=true  -e INFLUXDB_ADMIN_USER=admin -e INFLUXDB_ADMIN_PASSWORD=admin  -p 8086:8086 -v influxdb:/var/lib/influxdb influxdb
+```
 ## adminMarketingUI & clientUI
 
 ```bash
