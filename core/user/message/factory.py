@@ -4,7 +4,7 @@
 
 def make_kafka_message(action='', message=None):
     """
-    Make a new KAFKA message for Uberoo
+    Make a new KAFKA message
     """
     import uuid
 
