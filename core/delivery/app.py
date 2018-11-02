@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import configparser
+import datetime
 import json
 import logging
 import os
@@ -8,6 +9,7 @@ import queue
 import signal
 import sys
 import threading
+from random import randint
 from time import sleep
 
 from flask import Flask, jsonify, render_template
@@ -39,6 +41,31 @@ threads = []
 threads_mq = {}
 # CLEAN EXIT EVENT
 t_stop_event = threading.Event()
+
+# Fake database
+# 20 cities
+cities = {
+    0: 'New York',
+    1: 'Los Angeles',
+    2: 'Chicago',
+    3: 'Houston',
+    4: 'Philadelphia',
+    5: 'Phoenix',
+    6: 'San Antonio',
+    7: 'San Diego',
+    8: 'Dallas',
+    9: 'San Jose',
+    10: 'Austin',
+    11: 'Jacksonville',
+    12: 'San Francisco',
+    13: 'Indianapolis',
+    14: 'Columbus',
+    15: 'Fort Worth',
+    16: 'Charlotte',
+    17: 'Detroit',
+    18: 'El Paso',
+    19: 'Seattle'
+}
 
 
 def __sigint_handler(signal, frame):
@@ -89,7 +116,7 @@ def status_route():
 
 
 ########################################################################################################################
-# CORE USER SERVICE ROUTES
+# CORE DELIVERY SERVICE ROUTES
 ########################################################################################################################
 
 @app.route("/delivery",
@@ -103,14 +130,14 @@ def post_delivery_route():
     message, request_id = make_kafka_message(
         action='DELIVERY_INITIATED',
         message={
-            'id': 10,
-            'city': 'Flers',
-            'date': '10 12 14'
+            'delivery_id': randint(1, 9999),
+            'city': cities[randint(0, 19)],
+            'date': str(datetime.datetime.now())
         }
     )
 
     # Send
-    threads_mq['user'].put(message)
+    threads_mq['delivery'].put(message)
 
     # Response with callback url
     return jsonify({
@@ -126,18 +153,21 @@ def post_delivery_checkpoint_route():
     :return:
     """
     # Build message
+    is_final_destination = False
+    if randint(0, 1) > 0:
+        is_final_destination = True
     message, request_id = make_kafka_message(
         action='DELIVERY_CHECKPOINT',
         message={
-            'id': 10,
-            'city': 'Flers',
-            'date': '10 12 14',
-            'isFinalDestination': False
+            'delivery_id': randint(1, 9999),
+            'city': cities[randint(0, 19)],
+            'date': str(datetime.datetime.now()),
+            'isFinalDestination': is_final_destination
         }
     )
 
     # Send
-    threads_mq['user'].put(message)
+    threads_mq['delivery'].put(message)
 
     # Response with callback url
     return jsonify({
