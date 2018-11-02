@@ -92,17 +92,21 @@ def status_route():
 # CORE USER SERVICE ROUTES
 ########################################################################################################################
 
-@app.route("/user/login",
+@app.route("/delivery",
            methods=['POST'])
-def post_user_login_route():
+def post_delivery_route():
     """
-    A known user has signed in
+    Create a new delivery
     :return:
     """
     # Build message
     message, request_id = make_kafka_message(
-        action='USER_LOGGED_IN',
-        message={}
+        action='DELIVERY_INITIATED',
+        message={
+            'id': 10,
+            'city': 'Flers',
+            'date': '10 12 14'
+        }
     )
 
     # Send
@@ -114,61 +118,22 @@ def post_user_login_route():
     }), 200
 
 
-@app.route("/user/logout",
+@app.route("/delivery/checkpoint",
            methods=['POST'])
-def post_user_logout_route():
+def post_delivery_checkpoint_route():
     """
-    A known user has signed off
+    Notify that the delivery has reached a checkpoint
     :return:
     """
     # Build message
     message, request_id = make_kafka_message(
-        action='USER_LOGGED_OUT',
-        message={}
-    )
-
-    # Send
-    threads_mq['user'].put(message)
-
-    # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
-
-
-@app.route("/user/register",
-           methods=['POST'])
-def post_user_register_route():
-    """
-    A new user has registered the system
-    :return:
-    """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='USER_REGISTERED',
-        message={}
-    )
-
-    # Send
-    threads_mq['user'].put(message)
-
-    # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
-
-
-@app.route("/user/timeout",
-           methods=['POST'])
-def post_user_timeout_route():
-    """
-    The system has no more request from the previously signed in user for the last 30 minutes
-    :return:
-    """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='USER_TIMED_OUT',
-        message={}
+        action='DELIVERY_CHECKPOINT',
+        message={
+            'id': 10,
+            'city': 'Flers',
+            'date': '10 12 14',
+            'isFinalDestination': False
+        }
     )
 
     # Send
