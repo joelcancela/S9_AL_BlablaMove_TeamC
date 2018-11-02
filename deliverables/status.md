@@ -22,3 +22,16 @@
 - Status flag: Orange
 - Maybe spent too much time design the architecture
 - Achieved: Redesigned architecture, started to develop (2 front-ends + Kafka + minimal back-end Spring)
+
+## Week 43: 22-28 October 2018
+
+- Status flag: Green
+- Walking skeleton is close
+- Next: Keep developing and start integrating
+
+## Week 44: 29 October-2 November 2018
+
+- Status flag: Green
+- A good chunk of the integration is done. The design of most of the data transiting in the message bus has been defined and are currently being worked on. 
+- Next: Be able to demo one of the feature required for the presentation
+- Frontend : Admin front needs a few adjustements
