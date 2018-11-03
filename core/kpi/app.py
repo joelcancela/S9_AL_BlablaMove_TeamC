@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import configparser
-import datetime
 import json
 import logging
 import os
@@ -9,7 +8,6 @@ import queue
 import signal
 import sys
 import threading
-from random import randint
 from time import sleep
 
 from flask import Flask, jsonify, render_template
