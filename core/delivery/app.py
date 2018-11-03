@@ -140,9 +140,7 @@ def post_delivery_route():
     threads_mq['delivery'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 @app.route("/delivery/checkpoint",
@@ -170,9 +168,7 @@ def post_delivery_checkpoint_route():
     threads_mq['delivery'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 ########################################################################################################################
