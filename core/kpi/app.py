@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 import configparser
+import datetime
 import json
 import logging
 import os
@@ -12,7 +13,7 @@ from time import sleep
 
 from flask import Flask, jsonify, render_template
 from flask.logging import default_handler
-from kafka import KafkaProducer
+from kafka import KafkaProducer, KafkaConsumer
 
 from message.factory import make_kafka_message
 
@@ -125,6 +126,52 @@ def http_server_worker():
     return
 
 
+def kafka_hb_consumer_worker():
+    """
+    Kafka Heartbeat Broadcast Listener
+    :return:
+    """
+    # Client
+    consumer = KafkaConsumer('heartbeat',
+                             bootstrap_servers=bootstrap_servers,
+                             value_deserializer=lambda item: json.loads(item.decode('utf-8')))
+
+    while not t_stop_event.is_set():
+        try:
+            # Message loop
+            for message in consumer:
+                logging.info("READING MESSAGE %s:%d:%d: key=%s value=%s" % (
+                    message.topic,
+                    message.partition,
+                    message.offset,
+                    message.key,
+                    message.value)
+                )
+
+                # simple sanitizer
+                if 'action' not in message.value:
+                    logging.info("MALFORMED MESSAGE value=%s SKIPPING" % (message.value,))
+                    continue
+
+                # Action switch
+                if str(message.value["action"]).upper() == 'HEARTBEAT_BROADCAST':
+                    logging.info("SENDING HEARTBEAT FOR " + __product__)
+                    # Send
+                    hb, request_id = make_kafka_message(
+                        action='HEARTBEAT_REPLY',
+                        message={
+                            'service_name': str(__product__),
+                            'timestamp': int(datetime.datetime.now().timestamp())
+                        }
+                    )
+                    threads_mq['heartbeat'].put(hb)
+        except Exception as e:
+            logging.fatal(e, exc_info=True)
+
+    consumer.close()
+    return
+
+
 def kafka_producer_worker(topic: str, mq: queue.Queue):
     """
     Kafka Generic Message Producer
@@ -221,6 +268,14 @@ if __name__ == '__main__':
             args=(topic, mq,)
         )
         threads.append(t_producer_worker)
+
+    # heartbeat consumer
+    t_kafka_hb_consumer_worker = threading.Thread(
+        name='kafka_hb_consumer_worker',
+        daemon=True,
+        target=kafka_hb_consumer_worker
+    )
+    threads.append(t_kafka_hb_consumer_worker)
 
     ###########################################################
 
