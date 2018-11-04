@@ -32,7 +32,6 @@ paths:
           description: puts a new message on 'kpi' topic
           examples:
             kafka message:
+              action: KPI_CITY_TOP10_BROADCAST
               message:
-                action: KPI_CITY_TOP10_BROADCAST
-                message:
-                  request: 212473551172061985453361601459639862673
+                request: 212473551172061985453361601459639862673
