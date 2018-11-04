@@ -110,9 +110,7 @@ def post_user_login_route():
     threads_mq['user'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 @app.route("/user/logout",
@@ -132,9 +130,7 @@ def post_user_logout_route():
     threads_mq['user'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 @app.route("/user/register",
@@ -154,9 +150,7 @@ def post_user_register_route():
     threads_mq['user'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 @app.route("/user/timeout",
@@ -176,9 +170,7 @@ def post_user_timeout_route():
     threads_mq['user'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 ########################################################################################################################

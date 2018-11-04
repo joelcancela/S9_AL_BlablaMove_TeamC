@@ -1,0 +1,94 @@
+swagger: '2.0'
+info:
+  description: Core User API
+  version: 1.0.0
+  title: Core User API
+  contact:
+    email: nikita.rousseau@etu.unice.fr
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+host: 0.0.0.0:5000
+
+tags:
+- name: user
+  description: User related calls
+
+paths:
+  /user/login:
+    post:
+      tags:
+      - user
+      operationId: userLoggedIn
+      description:
+        A known user has signed in
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: puts a new message on 'user' topic
+          examples:
+            kafka message:
+              action: USER_LOGGED_IN
+              message:
+                request: 276801864750038667247257204658371253596
+  /user/logout:
+    post:
+      tags:
+      - user
+      operationId: userLoggedOut
+      description:
+        A known user has signed off
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: puts a new message on 'user' topic
+          examples:
+            kafka message:
+              action: USER_LOGGED_OUT
+              message:
+                request: 284044060031150760204473124208050628397
+  /user/register:
+    post:
+      tags:
+      - user
+      operationId: userRegistered
+      description:
+        A new user has registered the system
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: puts a new message on 'user' topic
+          examples:
+            kafka message:
+              action: USER_REGISTERED
+              message:
+                request: 143651777008128024300122166239899424283
+  /user/timeout:
+    post:
+      tags:
+      - user
+      operationId: userTimeout
+      description:
+        The system has no more request from the previously signed in user for the last 30 minutes
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: puts a new message on 'user' topic
+          examples:
+            kafka message:
+              action: USER_TIMED_OUT
+              message:
+                request: 155908099531320687329083882077347924467
