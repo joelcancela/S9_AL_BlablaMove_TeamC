@@ -1,0 +1,38 @@
+swagger: '2.0'
+info:
+  description: Core KPI API
+  version: 1.0.0
+  title: Core KPI API
+  contact:
+    email: nikita.rousseau@etu.unice.fr
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+host: 0.0.0.0:5000
+
+tags:
+- name: kpi
+  description: KPI related calls
+
+paths:
+  /kpi/city/top10:
+    get:
+      tags:
+      - kpi
+      operationId: cityTop10
+      description:
+        Ask the system the most active cities by initiated deliveries
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        200:
+          description: puts a new message on 'kpi' topic
+          examples:
+            kafka message:
+              message:
+                action: KPI_CITY_TOP10_BROADCAST
+                message:
+                  request: 212473551172061985453361601459639862673

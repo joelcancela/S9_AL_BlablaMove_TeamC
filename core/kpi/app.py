@@ -110,9 +110,7 @@ def get_kpi_city_top10_route():
     threads_mq['kpi'].put(message)
 
     # Response with callback url
-    return jsonify({
-        "message": message
-    }), 200
+    return jsonify(message), 200
 
 
 ########################################################################################################################
