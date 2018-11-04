@@ -1,64 +1,63 @@
----
-swagger: "2.0"
+swagger: '2.0'
 info:
-  description: "Core Delivery API"
-  version: "1.0.0"
-  title: "Core Delivery API"
+  description: Core Delivery API
+  version: 1.0.0
+  title: Core Delivery API
   contact:
-    email: "nikita.rousseau@etu.unice.fr"
+    email: nikita.rousseau@etu.unice.fr
   license:
-    name: "MIT"
-    url: "https://opensource.org/licenses/MIT"
-host: "0.0.0.0:5000"
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+host: 0.0.0.0:5000
+
 tags:
-- name: "delivery"
-  description: "Delivery related calls"
+- name: delivery
+  description: Delivery related calls
+
 paths:
   /delivery:
     post:
       tags:
-      - "delivery"
-      description: "Create a new delivery"
-      operationId: "newDelivery"
+      - delivery
+      operationId: newDelivery
+      description:
+        Create a new delivery
       consumes:
-      - "application/json"
+      - application/json
       produces:
-      - "application/json"
-      parameters: []
+      - application/json
       responses:
         200:
-          description: "puts a new message on 'delivery' topic"
+          description: puts a new message on 'delivery' topic
           examples:
             kafka message:
+              action: DELIVERY_INITIATED
               message:
-                action: "DELIVERY_INITIATED"
-                message:
-                  city: "Indianapolis"
-                  date: "2018-11-03 18:57:05.043943"
-                  delivery_id: 493
-                  request: 265631681983299000533869730397910204416
+                city: Indianapolis
+                date: '2018-11-03 18:57:05.043943'
+                delivery_id: 493
+                request: 265631681983298995857651895017366232219
   /delivery/checkpoint:
     post:
       tags:
-      - "delivery"
-      description: "Notify that the delivery has reached a checkpoint"
-      operationId: "newDeliveryCheckpoint"
+      - delivery
+      operationId: newDeliveryCheckpoint
+      description:
+        Notify that the delivery has reached a checkpoint
       consumes:
-      - "application/json"
+      - application/json
       produces:
-      - "application/json"
-      parameters: []
+      - application/json
       responses:
         200:
-          description: "puts a new message on 'delivery' topic"
+          description: puts a new message on 'delivery' topic
           examples:
             kafka message:
+              action: DELIVERY_CHECKPOINT
               message:
-                action: "DELIVERY_CHECKPOINT"
-                message:
-                  delivery_id: 1958
-                  city: "Detroit"
-                  date: "2018-11-03 19:13:37.374029"
-                  isFinalDestination: true
-                  request: 267632146774148881282832656476860841984
-definitions: {}
+                delivery_id: 1958
+                city: Detroit
+                date: '2018-11-03 19:13:37.374029'
+                isFinalDestination: true
+                request: 267632146774148875279637168125941151364
