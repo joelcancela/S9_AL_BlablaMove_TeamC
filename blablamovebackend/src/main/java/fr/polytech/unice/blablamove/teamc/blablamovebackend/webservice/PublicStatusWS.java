@@ -1,6 +1,6 @@
 package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.ReportIssueRequest;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.dto.ReportIssueRequest;
 import org.springframework.data.util.Pair;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -2,9 +2,9 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.model;
 
 public class CityReport {
     private City city;
-    private Integer transactionCount;
+    private Long transactionCount;
 
-    public CityReport(City city, Integer transactionCount) {
+    public CityReport(City city, Long transactionCount) {
         this.city = city;
         this.transactionCount = transactionCount;
     }
@@ -17,11 +17,11 @@ public class CityReport {
         this.city = city;
     }
 
-    public Integer getTransactionCount() {
+    public Long getTransactionCount() {
         return transactionCount;
     }
 
-    public void setTransactionCount(Integer transactionCount) {
+    public void setTransactionCount(Long transactionCount) {
         this.transactionCount = transactionCount;
     }
 }

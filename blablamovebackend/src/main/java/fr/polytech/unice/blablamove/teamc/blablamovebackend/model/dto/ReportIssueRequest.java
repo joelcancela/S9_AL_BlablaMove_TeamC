@@ -1,4 +1,4 @@
-package fr.polytech.unice.blablamove.teamc.blablamovebackend.model;
+package fr.polytech.unice.blablamove.teamc.blablamovebackend.model.dto;
 
 /**
  * Class ReportIssueRequest
