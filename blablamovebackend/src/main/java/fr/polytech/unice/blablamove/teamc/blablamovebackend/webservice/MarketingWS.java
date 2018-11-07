@@ -1,5 +1,6 @@
 package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
@@ -52,9 +53,8 @@ public class MarketingWS {
 
 	@RequestMapping(path = "/mostActiveCities", method = RequestMethod.GET)
 	public List<CityReport> getMostActiveCitiesAllTime() {
-		InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "admin", "admin");
 		Query queryObject = new Query("Select * from delivery_initiated", "blablamove");
-		QueryResult queryResult = influxDB.query(queryObject);
+		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
 		List<DeliveryInitiated> deliveryInitiatedList = resultMapper

@@ -57,6 +57,7 @@ export class HeatmapComponent implements OnInit {
   }
 
   addHeatmapForCity(cityReport: CityReport) {
+    console.log(cityReport);
     const parentThis = this;
     this.openStreetMapService.getGPSCoordinates(cityReport.city.name).subscribe(cityInfo => {
       const cityFinalInfo = cityInfo[0]; // sale

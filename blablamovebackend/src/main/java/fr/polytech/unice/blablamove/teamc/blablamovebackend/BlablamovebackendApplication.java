@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class BlablamovebackendApplication {
-
+    public static InfluxDB influxDB;
     public static void main(String[] args) throws Exception {
         ConfigurableApplicationContext context = SpringApplication.run(BlablamovebackendApplication.class, args);
         Consumer consumer = context.getBean(Consumer.class);
@@ -25,9 +25,9 @@ public class BlablamovebackendApplication {
         consumer.latchDelivery(10, TimeUnit.SECONDS);
         consumer.latchUser(10, TimeUnit.SECONDS);
 
-        InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "admin", "admin");
+        influxDB = InfluxDBFactory.connect("http://localhost:8086", "admin", "admin");
         influxDB.createRetentionPolicy("defaultPolicy", "baeldung", "30d", 1, true);
-        influxDB.setLogLevel(InfluxDB.LogLevel.FULL);
+        influxDB.setLogLevel(InfluxDB.LogLevel.NONE);
         Pong response = influxDB.ping();
         if (response.getVersion().equalsIgnoreCase("unknown")) {
             System.out.println("Error pinging server.");
@@ -44,6 +44,6 @@ public class BlablamovebackendApplication {
             influxDB.setDatabase("blablamove");
             System.out.println("Database blablamove exists");
         }
-        influxDB.close();
+        //influxDB.close();
     }
 }
