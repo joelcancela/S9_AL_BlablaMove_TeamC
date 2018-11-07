@@ -33,7 +33,7 @@ public class Consumer {
 
     @KafkaListener(topics = "${message.topic.delivery}", containerFactory = "KafkaListenerContainerFactory")
     public void listenDelivery(String message) {
-        //System.out.println("Received Message in topic 'topic': " + message);
+        System.out.println("Received Message in topic 'delivery': " + message);
         Gson gson = new GsonBuilder().create();
         try {
             Message msg = gson.fromJson(message, Message.class);
@@ -57,7 +57,7 @@ public class Consumer {
 
     @KafkaListener(topics = "${message.topic.user}", containerFactory = "KafkaListenerContainerFactory")
     public void listenUser(String message) {
-        // System.out.println("Received Message in topic 'topic': " + message);
+        System.out.println("Received Message in topic 'user': " + message);
         Gson gson = new GsonBuilder().create();
         try {
             Message msg = gson.fromJson(message, Message.class);
