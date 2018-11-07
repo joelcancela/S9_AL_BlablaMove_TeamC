@@ -9,6 +9,8 @@ import queue
 import signal
 import sys
 import threading
+import uuid
+import time
 from time import sleep
 
 from flask import Flask, jsonify, render_template
@@ -100,10 +102,15 @@ def post_user_login_route():
     A known user has signed in
     :return:
     """
+
+    st = datetime.datetime.now().replace(microsecond=0).isoformat()
     # Build message
     message, request_id = make_kafka_message(
         action='USER_LOGGED_IN',
-        message={}
+        message={
+            'time': st,
+            'uuid': str(uuid.uuid4())
+        }
     )
 
     # Send
@@ -281,7 +288,7 @@ if __name__ == '__main__':
     app.logger.removeHandler(default_handler)
     if env == 'production':
         logging.basicConfig(
-            level=logging.WARNING
+            level=logging.INFO
         )
     else:
         logging.basicConfig(

@@ -22,8 +22,8 @@ public class BlablamovebackendApplication {
         Consumer consumer = context.getBean(Consumer.class);
         Sender sender = context.getBean(Sender.class);
 
-        sender.send("Hello");
-        consumer.latch(10, TimeUnit.SECONDS);
+        consumer.latchDelivery(10, TimeUnit.SECONDS);
+        consumer.latchUser(10, TimeUnit.SECONDS);
 
         InfluxDB influxDB = InfluxDBFactory.connect("http://localhost:8086", "admin", "admin");
         influxDB.createRetentionPolicy("defaultPolicy", "baeldung", "30d", 1, true);

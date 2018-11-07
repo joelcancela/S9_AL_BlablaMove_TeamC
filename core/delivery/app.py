@@ -9,6 +9,7 @@ import queue
 import signal
 import sys
 import threading
+import uuid
 from random import randint
 from time import sleep
 
@@ -42,29 +43,12 @@ threads_mq = {}
 # CLEAN EXIT EVENT
 t_stop_event = threading.Event()
 
-# Fake database
-# 20 cities
 cities = {
-    0: 'New York',
-    1: 'Los Angeles',
-    2: 'Chicago',
-    3: 'Houston',
-    4: 'Philadelphia',
-    5: 'Phoenix',
-    6: 'San Antonio',
-    7: 'San Diego',
-    8: 'Dallas',
-    9: 'San Jose',
-    10: 'Austin',
-    11: 'Jacksonville',
-    12: 'San Francisco',
-    13: 'Indianapolis',
-    14: 'Columbus',
-    15: 'Fort Worth',
-    16: 'Charlotte',
-    17: 'Detroit',
-    18: 'El Paso',
-    19: 'Seattle'
+    0: 'Marseille',
+    1: 'Antibes',
+    2: 'Toulon',
+    3: 'Aix-en-provence',
+    4: 'Nice'
 }
 
 
@@ -130,9 +114,9 @@ def post_delivery_route():
     message, request_id = make_kafka_message(
         action='DELIVERY_INITIATED',
         message={
-            'delivery_id': randint(1, 9999),
-            'city': cities[randint(0, 19)],
-            'date': str(datetime.datetime.now())
+            'delivery_uuid': str(uuid.uuid4()),
+            'city': cities[randint(0, len(cities)-1)],
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
         }
     )
 
@@ -158,8 +142,8 @@ def post_delivery_checkpoint_route():
         action='DELIVERY_CHECKPOINT',
         message={
             'delivery_id': randint(1, 9999),
-            'city': cities[randint(0, 19)],
-            'date': str(datetime.datetime.now()),
+            'city': cities[randint(0, len(cities)-1)],
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
             'isFinalDestination': is_final_destination
         }
     )
@@ -279,7 +263,7 @@ if __name__ == '__main__':
     app.logger.removeHandler(default_handler)
     if env == 'production':
         logging.basicConfig(
-            level=logging.WARNING
+            level=logging.INFO
         )
     else:
         logging.basicConfig(
