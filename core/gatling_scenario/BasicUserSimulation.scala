@@ -4,7 +4,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import scala.concurrent.duration._
 
-class PaymentSimulation extends Simulation { 
+class BasicUserSimulation extends Simulation { 
 
   val userHttpProtocol = http 
     .baseUrl("http://127.0.0.1:5002")
