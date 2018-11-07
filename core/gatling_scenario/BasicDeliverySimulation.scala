@@ -7,19 +7,19 @@ import scala.concurrent.duration._
 class BasicDeliverySimulation extends Simulation { 
 
   val userHttpProtocol = http 
-    .baseUrl("http://127.0.0.1:5000")
+    .baseUrl("http://localhost:5000")
 
   val deliveryCreation = scenario("deliveryCreation").exec(Delivery.createDelivery)
-  val deliveryUpdate = scenario("deliveryUpdate").exec(Delivery.updateDelivery)
+  //val deliveryUpdate = scenario("deliveryUpdate").exec(Delivery.updateDelivery)
 
   setUp( 
     deliveryCreation.inject(
-      rampUsersPerSec(10) to 200 during (10 seconds) randomized
-    ),
-    deliveryUpdate.inject(
-      rampUsersPerSec(10) to 200 during (10 seconds) randomized,
-      heavisideUsers(1000) during (10 seconds)
-    )
+      rampUsersPerSec(1) to 800 during (5 seconds)
+    )//,
+    //deliveryUpdate.inject(
+    //  rampUsersPerSec(10) to 200 during (10 seconds) randomized,
+    //  heavisideUsers(1000) during (10 seconds)
+    //)
   ).protocols(userHttpProtocol)
 }
 

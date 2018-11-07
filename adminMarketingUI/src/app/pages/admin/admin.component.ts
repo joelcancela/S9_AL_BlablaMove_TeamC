@@ -29,7 +29,7 @@ export class AdminComponent implements OnInit {
   showYAxisLabel = true;
   yAxisLabel = 'Users connections';
   timeline = true;
-  yScaleMax = 4000;
+  yScaleMax = 500;
   yScaleMin = 0;
   colorScheme = {
     domain: ['#001acc', '#a10a28']
@@ -54,6 +54,7 @@ export class AdminComponent implements OnInit {
   }
 
   adaptData(response) {
+    console.log(response);
     const reFirst = new RegExp('localDateTime', 'g');
     const reSecond = new RegExp('totalUsersConnected', 'g');
     const adaptedResponse = JSON.stringify(response).replace(reFirst, 'name').replace(reSecond, 'value');

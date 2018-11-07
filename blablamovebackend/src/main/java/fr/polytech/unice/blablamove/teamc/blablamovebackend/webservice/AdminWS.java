@@ -26,22 +26,22 @@ import java.util.Random;
 @RequestMapping(path = "/admin")
 public class AdminWS {
 
-	private List<ConnectionLog> connections = new ArrayList<>();
-
 	//TODO: Get from db
 	public AdminWS() {
-		Random rand = new Random();
+		/*Random rand = new Random();
 		for (int i = 0; i < 24; i++) {
+
 			if (LocalDateTime.now().minusHours(i).getHour() <= 13 && LocalDateTime.now().minusHours(i).getHour() >= 11) {//Simuler pic entre 11h et 13h
 				connections.add(new ConnectionLog(LocalDateTime.now().minusHours(i), rand.nextInt(2000) + 1500));
 			} else {
 				connections.add(new ConnectionLog(LocalDateTime.now().minusHours(i), rand.nextInt(2000)));
 			}
-		}
+		}*/
 	}
 
 	@RequestMapping(path = "/last24Connections", method = RequestMethod.GET)
 	public List<ConnectionLog> getLast24Connections() {
+		List<ConnectionLog> connections = new ArrayList<>();
 		Query queryObject = new Query("Select * from user_logged_in", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
@@ -50,7 +50,7 @@ public class AdminWS {
 				.toPOJO(queryResult, UserLoggedIn.class);
 		for (int i = 0; i < 24; i++) {
 			LocalDateTime stop = LocalDateTime.now().minusHours(i);
-			LocalDateTime start = LocalDateTime.now().minusHours(i++);
+			LocalDateTime start = LocalDateTime.now().minusHours(i+1);
 			long numberOfUsers =
 					userLoggedInList.stream().filter(userLoggedIn -> instantIsBetweenDates(userLoggedIn.getTime(),
 							start, stop)).count();
