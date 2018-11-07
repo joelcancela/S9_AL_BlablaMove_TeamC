@@ -9,9 +9,9 @@ import java.time.LocalDateTime;
  */
 public class ConnectionLog {
 	private LocalDateTime localDateTime;
-	private int totalUsersConnected;
+	private long totalUsersConnected;
 
-	public ConnectionLog(LocalDateTime localDateTime, int totalUsersConnected) {
+	public ConnectionLog(LocalDateTime localDateTime, long totalUsersConnected) {
 		this.localDateTime = localDateTime;
 		this.totalUsersConnected = totalUsersConnected;
 	}
@@ -24,11 +24,11 @@ public class ConnectionLog {
 		this.localDateTime = localDateTime;
 	}
 
-	public int getTotalUsersConnected() {
+	public long getTotalUsersConnected() {
 		return totalUsersConnected;
 	}
 
-	public void setTotalUsersConnected(int totalUsersConnected) {
+	public void setTotalUsersConnected(long totalUsersConnected) {
 		this.totalUsersConnected = totalUsersConnected;
 	}
 }

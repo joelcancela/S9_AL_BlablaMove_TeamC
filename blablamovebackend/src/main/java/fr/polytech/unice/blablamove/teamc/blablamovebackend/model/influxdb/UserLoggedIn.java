@@ -17,4 +17,12 @@ public class UserLoggedIn {
 
 	@Column(name = "uuid")
 	private String uuid;
+
+	public Instant getTime() {
+		return time;
+	}
+
+	public String getUuid() {
+		return uuid;
+	}
 }
