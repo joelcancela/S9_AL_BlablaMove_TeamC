@@ -25,7 +25,7 @@ public class BlablamovebackendApplication {
         consumer.latchDelivery(10, TimeUnit.SECONDS);
         consumer.latchUser(10, TimeUnit.SECONDS);
 
-        influxDB = InfluxDBFactory.connect("http://localhost:8086", "admin", "admin");
+        influxDB = InfluxDBFactory.connect("http://influxdb:8086", "admin", "admin");
         influxDB.createRetentionPolicy("defaultPolicy", "baeldung", "30d", 1, true);
         influxDB.setLogLevel(InfluxDB.LogLevel.NONE);
         Pong response = influxDB.ping();

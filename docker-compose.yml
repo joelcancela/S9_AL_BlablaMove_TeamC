@@ -5,30 +5,42 @@ services:
     container_name: al_adminMarketingUI
     image: "al/fe/admin_marketing_ui"
     ports:
-      - "8080:80"
-    expose:
-      - "8080"
+      - "4201:4200"
     restart: always
-    links:
-      - dashboardService
+
   clientUI:
     container_name: al_clientUI
     image: "al/fe/client_ui"
     ports:
-      - "8081:80"
-    expose:
-      - "8081"
+      - "4202:4200"
     restart: always
-    links:
-      - dashboardService
+
   dashboardService:
     container_name: al_dashboardService
     image: "al/ws/dashboardservice"
     ports:
-      - "9555:8080"
-    expose:
-      - "9555"
+      - "8080:8080"
     restart: always
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    links:
+      - kafka
+      - influxdb
+
+  user:
+    container_name: al_user
+    image: "al/fe/core/user"
+    ports:
+      - "5001:5000"
+    links:
+      - kafka
+
+  delivery:
+    container_name: al_delivery
+    image: "al/fe/core/delivery"
+    ports:
+      - "5002:5000"
     links:
       - kafka
 
@@ -51,6 +63,11 @@ services:
 
   influxdb:
     image: influxdb
+    healthcheck:
+     test: "curl -f http://localhost:8086/ping"
+     interval: 3s
+     timeout: 10s
+     retries: 5
     ports:
       - 8086:8086
 # Add to containers talking to Kafka:
