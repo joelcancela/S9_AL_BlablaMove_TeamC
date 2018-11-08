@@ -21,10 +21,10 @@ public class PublicStatusWS {
         List<Pair<LocalDateTime, Integer>> report = new ArrayList<>();
         LocalDateTime date = LocalDateTime.now().withSecond(0).withMinute(0).withNano(0);
         for (int i = 24; i > 0; i--) {
-            date = date.minusHours(1);
             Random rand = new Random();
             int incident = rand.nextInt(20);
             report.add(Pair.of(date, incident));
+            date = date.minusHours(1);
         }
         return report;
     }

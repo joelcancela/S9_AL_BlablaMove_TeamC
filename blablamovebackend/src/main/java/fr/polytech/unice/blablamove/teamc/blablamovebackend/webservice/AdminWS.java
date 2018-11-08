@@ -15,7 +15,6 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Class AdminWS
@@ -26,17 +25,7 @@ import java.util.Random;
 @RequestMapping(path = "/admin")
 public class AdminWS {
 
-	//TODO: Get from db
 	public AdminWS() {
-		/*Random rand = new Random();
-		for (int i = 0; i < 24; i++) {
-
-			if (LocalDateTime.now().minusHours(i).getHour() <= 13 && LocalDateTime.now().minusHours(i).getHour() >= 11) {//Simuler pic entre 11h et 13h
-				connections.add(new ConnectionLog(LocalDateTime.now().minusHours(i), rand.nextInt(2000) + 1500));
-			} else {
-				connections.add(new ConnectionLog(LocalDateTime.now().minusHours(i), rand.nextInt(2000)));
-			}
-		}*/
 	}
 
 	@RequestMapping(path = "/last24Connections", method = RequestMethod.GET)
@@ -54,7 +43,7 @@ public class AdminWS {
 			long numberOfUsers =
 					userLoggedInList.stream().filter(userLoggedIn -> instantIsBetweenDates(userLoggedIn.getTime(),
 							start, stop)).count();
-			connections.add(new ConnectionLog(start, numberOfUsers));
+			connections.add(new ConnectionLog(stop, numberOfUsers));
 		}
 
 		return connections;
