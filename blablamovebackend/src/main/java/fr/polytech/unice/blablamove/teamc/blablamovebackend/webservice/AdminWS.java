@@ -38,8 +38,8 @@ public class AdminWS {
 		List<UserLoggedIn> userLoggedInList = resultMapper
 				.toPOJO(queryResult, UserLoggedIn.class);
 		for (int i = 0; i < 24; i++) {
-			LocalDateTime stop = LocalDateTime.now().minusHours(i);
-			LocalDateTime start = LocalDateTime.now().minusHours(i+1);
+			LocalDateTime stop = LocalDateTime.now().minusHours(i).withSecond(0).withMinute(0).withNano(0);
+			LocalDateTime start = LocalDateTime.now().minusHours(i+1).withSecond(0).withMinute(0).withNano(0);
 			long numberOfUsers =
 					userLoggedInList.stream().filter(userLoggedIn -> instantIsBetweenDates(userLoggedIn.getTime(),
 							start, stop)).count();
