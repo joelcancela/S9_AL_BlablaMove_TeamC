@@ -29,9 +29,16 @@
 - Walking skeleton is close
 - Next: Keep developing and start integrating
 
-## Week 44: 29 October-2 November 2018
+## Week 44: 29 October-4 November 2018
 
 - Status flag: Green
 - A good chunk of the integration is done. The design of most of the data transiting in the message bus has been defined and are currently being worked on. 
 - Next: Be able to demo one of the feature required for the presentation
 - Frontend : Admin front needs a few adjustements
+
+## Week 45: 29 October-4 November 2018
+
+- Status flag: Green
+- Integration done
+- Two of the three stories can be demonstrated e2e
+- Load testing scenarios
