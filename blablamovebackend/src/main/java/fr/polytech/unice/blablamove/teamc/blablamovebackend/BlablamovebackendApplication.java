@@ -6,11 +6,8 @@ import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Pong;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,10 +37,9 @@ public class BlablamovebackendApplication {
         if (!influxDB.databaseExists("blablamove")) {
             influxDB.createDatabase("blablamove");
             System.out.println("Will create blablamove database");
-        } else {
-            influxDB.setDatabase("blablamove");
-            System.out.println("Database blablamove exists");
-        }
+        } 
+        influxDB.setDatabase("blablamove");
+
         //influxDB.close();
     }
 }
