@@ -1,0 +1,10 @@
+{
+  "simulation": "computerdatabase.BasicUserSimulation",
+  "simulationId": "xafaa",
+  "start": 1541706759773,
+  "description": "vbsdkfo",
+  "scenarios": ["UsersLoginAndLogout"],
+  "assertions": [
+
+  ]
+}

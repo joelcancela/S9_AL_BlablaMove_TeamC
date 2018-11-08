@@ -1,24 +1,23 @@
 package computerdatabase
 
-import io.gatling.core.Predef._ 
+import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import scala.concurrent.duration._
 
-class BasicUserSimulation extends Simulation { 
+class BasicUserSimulation extends Simulation {
 
-  val userHttpProtocol = http 
-    .baseUrl("http://127.0.0.1:5000")
+  val userHttpProtocol = http.baseURL("http://host.docker.internal:5001")
 
   //val usersRegistering = scenario("UsersRegistering").exec(User.register)
   val usersLoginAndLogout = scenario("UsersLoginAndLogout").exec(User.loginAndLogout)
 
-  setUp( 
+  setUp(
    // usersRegistering.inject(
     //  rampUsersPerSec(10) to 200 during (10 seconds) randomized,
     //  heavisideUsers(1000) during (10 seconds)
    // ),
     usersLoginAndLogout.inject(
-      rampUsersPerSec(10) to 15 during (25 seconds) randomized,
+      rampUsersPerSec(10) to 20 during (20 seconds) randomized,
     )
   ).protocols(userHttpProtocol)
 }

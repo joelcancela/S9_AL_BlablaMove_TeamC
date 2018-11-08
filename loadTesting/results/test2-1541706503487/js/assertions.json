@@ -1,0 +1,10 @@
+{
+  "simulation": "computerdatabase.BasicDeliverySimulation",
+  "simulationId": "test2",
+  "start": 1541706503487,
+  "description": "test22",
+  "scenarios": ["deliveryCreation"],
+  "assertions": [
+
+  ]
+}
