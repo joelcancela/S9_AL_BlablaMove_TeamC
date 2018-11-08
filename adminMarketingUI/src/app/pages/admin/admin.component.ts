@@ -62,6 +62,8 @@ export class AdminComponent implements OnInit {
     adaptedObject.reverse();
     adaptedObject.map(obj => obj.name = this.formatDate(obj.name));
     const avg = Math.round(adaptedObject.reduce((total, obj) => total + obj.value, 0) / adaptedObject.length);
+    const max = adaptedObject.reduce((max, n) => Math.max(max, n.value), adaptedObject[0].value);
+    this.yScaleMax = ((max / (10 * Math.log10(max))) + 1) * (10 * Math.log10(max));
     this.data = [
       {
         'name': 'Connections',

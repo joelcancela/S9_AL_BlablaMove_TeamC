@@ -74,10 +74,9 @@ services:
   influxdb:
     image: influxdb
     healthcheck:
-     test: "curl -f http://localhost:8086/ping"
-     interval: 3s
-     timeout: 10s
-     retries: 5
+      test: "curl -sL -I localhost:8086/ping | grep \"204 No Content\""
+      interval: 3s
+      retries: 2
     ports:
       - 8086:8086
 # Add to containers talking to Kafka:

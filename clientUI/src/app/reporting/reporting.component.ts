@@ -67,6 +67,8 @@ export class ReportingComponent implements OnInit {
     adaptedObject.map(obj => obj.name = this.formatDate(obj.name));
     const avg = Math.round(adaptedObject.reduce((total, obj) => total + obj.value, 0) / adaptedObject.length);
     this.lastHourProblems = adaptedObject[adaptedObject.length - 1].value;
+    const max = adaptedObject.reduce((max, n) => Math.max(max, n.value), adaptedObject[0].value);
+    this.yScaleMax = ((max / (10 * Math.log10(max))) + 1) * (10 * Math.log10(max));
     this.data = [
       {
         'name': 'Reports',
