@@ -234,7 +234,6 @@ def kafka_hb_consumer_worker():
     consumer.close()
     return
 
-
 def kafka_producer_worker(topic: str, mq: queue.Queue):
     """
     Kafka Generic Message Producer
