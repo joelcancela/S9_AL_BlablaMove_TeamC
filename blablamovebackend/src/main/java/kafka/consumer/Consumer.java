@@ -22,6 +22,7 @@ public class Consumer {
 
     /**
      * This method is called whenever a message is received on the Kafka topic associated with deliveries.
+     *
      * @param message The message received on the message bus.
      */
     @KafkaListener(topics = "${message.topic.delivery}", containerFactory = "KafkaListenerContainerFactory")
@@ -36,13 +37,14 @@ public class Consumer {
                 storeDeliveryIssue(msg);
             }
         } catch (JsonSyntaxException e) {
-            System.err.println("Error while parsing received message");
+            LOG.error("Error while parsing received message");
         }
         latchDelivery.countDown();
     }
 
     /**
      * Stores a new delivery initiation in the Influx Database.
+     *
      * @param msg The kafka message associated with this delivery.
      */
     private void storeDeliveryInitiation(Message msg) {
@@ -58,6 +60,7 @@ public class Consumer {
 
     /**
      * Stores a new delivery issue in the Influx Database.
+     *
      * @param msg The kafka message associated with this delivery.
      */
     private void storeDeliveryIssue(Message msg) {
@@ -66,12 +69,11 @@ public class Consumer {
                 .addField("issue_type", linkedTreeMap.get("issue_type").toString())
                 .build();
         saveToInfluxDB(p);
-
     }
 
     @KafkaListener(topics = "${message.topic.user}", containerFactory = "KafkaListenerContainerFactory")
     public void listenUser(String message) {
-        System.out.println("Received Message in topic 'user': " + message);
+        LOG.info("Received Message in topic 'user': " + message);
         Gson gson = new GsonBuilder().create();
         try {
             Message msg = gson.fromJson(message, Message.class);
@@ -87,17 +89,17 @@ public class Consumer {
                 saveToInfluxDB(p);
             }
         } catch (JsonSyntaxException e) {
-            System.err.println("Error while parsing received message");
+            LOG.error("Error while parsing received message");
         }
         latchUser.countDown();
     }
 
     public void latchDelivery(int time, TimeUnit unit) throws InterruptedException {
-        this.latchDelivery.await(time,unit);
+        this.latchDelivery.await(time, unit);
     }
 
     public void latchUser(int time, TimeUnit unit) throws InterruptedException {
-        this.latchUser.await(time,unit);
+        this.latchUser.await(time, unit);
     }
 
     private void saveToInfluxDB(Point p) {
