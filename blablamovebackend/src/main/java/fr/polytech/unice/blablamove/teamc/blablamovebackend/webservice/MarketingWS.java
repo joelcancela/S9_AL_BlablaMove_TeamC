@@ -4,6 +4,7 @@ import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApp
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Query;
@@ -13,10 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -26,7 +24,7 @@ public class MarketingWS {
 	private List<City> cities = new ArrayList<>();
 	private List<CityReport> citiesReports = new ArrayList<>();
 
-	//TODO: get data from DB
+	// TODO: get data from DB
 	public MarketingWS() {
 		City marseille = new City("Marseille");
 		City antibes = new City("Antibes");
@@ -38,12 +36,6 @@ public class MarketingWS {
 		cities.add(toulon);
 		cities.add(aix);
 		cities.add(nice);
-
-		//citiesReports.add(new CityReport(marseille, 3528));
-		//citiesReports.add(new CityReport(antibes, 1352));
-		//citiesReports.add(new CityReport(toulon, 931));
-		//citiesReports.add(new CityReport(aix, 2500));
-		//citiesReports.add(new CityReport(nice, 2955));
 	}
 
 	@RequestMapping(path = "/cities", method = RequestMethod.GET)
@@ -70,5 +62,18 @@ public class MarketingWS {
 
 		return reports.stream().sorted((f1, f2) -> Long.compare(f2.getTransactionCount(),
 				f1.getTransactionCount())).collect(Collectors.toCollection(LinkedList::new));
+	}
+
+
+	@RequestMapping(path = "/deliveryIssues", method = RequestMethod.GET)
+	public List<DeliveryIssue> getLast24hDeliveryIssues() {
+		// TODO
+		return null;
+	}
+
+	@RequestMapping(path = "/specificDeliveryIssues", method = RequestMethod.GET)
+	public List<DeliveryIssue> getIssuesByTimeframe(Date from, Date to) {
+		// TODO
+		return null;
 	}
 }
