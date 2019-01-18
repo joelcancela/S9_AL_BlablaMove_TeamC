@@ -1,8 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {City} from '../model/city';
 import {Observable} from 'rxjs';
-import {catchError} from 'rxjs/operators';
 import {ConnectionLog} from '../model/connection-log';
 import {ConstantService} from '../constants/constant.service';
 
