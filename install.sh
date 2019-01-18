@@ -1,3 +1,4 @@
+#!/bin/bash
 cd adminMarketingUI
 docker build -t al/fe/admin_marketing_ui .
 cd ../blablamovebackend

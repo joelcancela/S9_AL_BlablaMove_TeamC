@@ -22,7 +22,7 @@ const PAGES_COMPONENTS = [
     DashboardModule,
     MiscellaneousModule,
     MarketingModule,
-    NgxChartsModule
+    NgxChartsModule,
   ],
   declarations: [
     ...PAGES_COMPONENTS,
