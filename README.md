@@ -32,6 +32,12 @@ docker-compose up
 docker run -e INFLUXDB_ADMIN_ENABLED=true  -e INFLUXDB_ADMIN_USER=admin -e INFLUXDB_ADMIN_PASSWORD=admin  -p 8086:8086 -v influxdb:/var/lib/influxdb influxdb
 ```
 
+Put this entry in your hosts file to test the db locally:
+
+```text
+127.0.0.1 influxdb
+```
+
 ### Kafka
 
 ```bash

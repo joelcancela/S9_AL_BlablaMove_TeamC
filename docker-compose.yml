@@ -77,8 +77,12 @@ services:
       test: "curl -sL -I localhost:8086/ping | grep \"204 No Content\""
       interval: 3s
       retries: 2
-    ports:
-      - 8086:8086
+    ports: 8086:8086
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: "admin"
+
 # Add to containers talking to Kafka:
 # links:
 #     - kafka

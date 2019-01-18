@@ -73,7 +73,8 @@ def __load_config():
     """
     Parse database configuration file
     """
-    config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.ini")
+    config_file = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), "config.ini")
     if not os.path.exists(config_file):
         raise FileNotFoundError(config_file)
     app_config = configparser.ConfigParser()
@@ -176,7 +177,7 @@ def post_delivery_issue():
     # Response with callback url
     return jsonify(message), 200
 
-    
+
 ########################################################################################################################
 # END: ROUTES
 ########################################################################################################################
@@ -212,7 +213,8 @@ def kafka_hb_consumer_worker():
 
                 # simple sanitizer
                 if 'action' not in message.value:
-                    logging.info("MALFORMED MESSAGE value=%s SKIPPING" % (message.value,))
+                    logging.info("MALFORMED MESSAGE value=%s SKIPPING" %
+                                 (message.value,))
                     continue
 
                 # Action switch
@@ -232,7 +234,6 @@ def kafka_hb_consumer_worker():
 
     consumer.close()
     return
-
 
 def kafka_producer_worker(topic: str, mq: queue.Queue):
     """
@@ -298,7 +299,8 @@ if __name__ == '__main__':
 
     # Bootstrap servers
     if ',' in str(app_config['bootstrap_servers']):
-        bootstrap_servers = list(filter(None, str(app_config['bootstrap_servers']).split(',')))
+        bootstrap_servers = list(
+            filter(None, str(app_config['bootstrap_servers']).split(',')))
     else:
         bootstrap_servers.append(str(app_config['bootstrap_servers']))
 
@@ -342,7 +344,8 @@ if __name__ == '__main__':
     ###########################################################
 
     # Start
-    logging.warning(__product__ + ' version ' + __version__ + ' (' + env + ') is starting...')
+    logging.warning(__product__ + ' version ' + __version__ +
+                    ' (' + env + ') is starting...')
 
     # Starting threads
     for t in threads:
