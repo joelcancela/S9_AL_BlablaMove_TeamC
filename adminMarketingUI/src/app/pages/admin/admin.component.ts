@@ -4,7 +4,7 @@ import {DashboardAdminService} from '../../services/dashboard-admin.service';
 @Component({
   selector: 'ngx-admin',
   templateUrl: './admin.component.html',
-  styleUrls: ['./admin.component.css']
+  styleUrls: ['./admin.component.css'],
 })
 export class AdminComponent implements OnInit {
 
@@ -16,9 +16,9 @@ export class AdminComponent implements OnInit {
       'series': [
         {
           'name': '00h00',
-          'value': 7
-        }
-      ]
+          'value': 7,
+        },
+      ],
     }];
   view: any[] = [700, 400];
   showXAxis = true;
@@ -32,7 +32,7 @@ export class AdminComponent implements OnInit {
   yScaleMax = 500;
   yScaleMin = 0;
   colorScheme = {
-    domain: ['#001acc', '#a10a28']
+    domain: ['#001acc', '#a10a28'],
   };
   autoScale = true;
 
@@ -67,16 +67,16 @@ export class AdminComponent implements OnInit {
     this.data = [
       {
         'name': 'Connections',
-        'series': adaptedObject
+        'series': adaptedObject,
       },
       {
         'name': 'Average',
         'series': [{
           'name': adaptedObject[0].name,
-          'value': avg
+          'value': avg,
         }, {
           'name': adaptedObject[adaptedObject.length - 1].name,
-          'value': avg
+          'value': avg,
         }]
       }];
   }

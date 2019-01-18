@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-marketing',
+  selector: 'ngx-app-marketing',
   templateUrl: './marketing.component.html',
-  styleUrls: ['./marketing.component.css']
+  styleUrls: ['./marketing.component.css'],
 })
+
 export class MarketingComponent implements OnInit {
 
   constructor() { }

@@ -5,7 +5,7 @@ import { ConstantService } from './constant.service';
 describe('ConstantService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [ConstantService]
+      providers: [ConstantService],
     });
   });
 
