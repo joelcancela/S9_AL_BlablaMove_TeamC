@@ -155,6 +155,28 @@ def post_delivery_checkpoint_route():
     return jsonify(message), 200
 
 
+@app.route("/delivery/issue",
+           methods=['POST'])
+def post_delivery_issue():
+    """
+    Notify that a specific delivery has had an issue.
+    :return:
+    """
+    # Build message
+    message, request_id = make_kafka_message(
+        action='DELIVERY_ISSUE',
+        message={
+            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY"
+        }
+    )
+
+    # Send
+    threads_mq['delivery'].put(message)
+
+    # Response with callback url
+    return jsonify(message), 200
+
+    
 ########################################################################################################################
 # END: ROUTES
 ########################################################################################################################
