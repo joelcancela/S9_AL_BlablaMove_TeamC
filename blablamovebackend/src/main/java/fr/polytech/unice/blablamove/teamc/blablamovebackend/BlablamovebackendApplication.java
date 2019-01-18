@@ -35,7 +35,6 @@ public class BlablamovebackendApplication {
             System.out.println(response.getVersion());
         }
 
-
         if (!influxDB.databaseExists("blablamove")) {
             influxDB.createDatabase("blablamove");
             System.out.println("Will create blablamove database");
