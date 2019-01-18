@@ -13,9 +13,10 @@ def kafka_producer_worker(
         topic: str,
         mq: queue.Queue):
     """
-    Kafka Generic Message Producer
-    as thread worker
+    Kafka Generic Message Producer, as thread worker
     Get messages from a shared mq queue.Queue
+    :param t_stop_event: threading.Event
+    :param bootstrap_servers: str
     :param topic: str
     :param mq: queue.Queue
     :return:

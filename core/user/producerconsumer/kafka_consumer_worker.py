@@ -7,18 +7,25 @@ from kafka import KafkaConsumer
 from message.make_kafka_message import make_kafka_message
 
 
-def kafka_hb_consumer_worker(
+def kafka_consumer_worker(
         t_stop_event: threading.Event,
         bootstrap_servers: str,
+        topic: str,
         service_name: str,
         threads_mq: dict):
     """
-    Kafka Heartbeat Broadcast Listener
+    Kafka Generic Message Consumer, as thread worker
+    Push back messages to shared Queue
+    :param t_stop_event: threading.Event
+    :param bootstrap_servers: str
+    :param topic: str
+    :param service_name: str
+    :param threads_mq: dict
     :return:
     """
 
     # Client
-    consumer = KafkaConsumer('heartbeat',
+    consumer = KafkaConsumer(topic,
                              bootstrap_servers=bootstrap_servers,
                              value_deserializer=lambda item: json.loads(item.decode('utf-8')))
 

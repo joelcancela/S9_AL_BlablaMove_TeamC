@@ -15,7 +15,7 @@ from time import sleep
 from twisted.web.static import File
 
 from producerconsumer.kafka_producer_worker import kafka_producer_worker
-from producerconsumer.kafka_hb_consumer_worker import kafka_hb_consumer_worker
+from producerconsumer.kafka_consumer_worker import kafka_consumer_worker
 from message.make_kafka_message import make_kafka_message
 
 __product__ = "Core User"
@@ -231,10 +231,10 @@ if __name__ == '__main__':
 
     # heartbeat consumer
     t_kafka_hb_consumer_worker = threading.Thread(
-        name='kafka_hb_consumer_worker',
+        name='kafka_heartbeat_consumer_worker',
         daemon=True,
-        target=kafka_hb_consumer_worker,
-        args=(t_stop_event, bootstrap_servers, __product__, threads_mq)
+        target=kafka_consumer_worker,
+        args=(t_stop_event, bootstrap_servers, 'heartbeat', __product__, threads_mq)
     )
     threads.append(t_kafka_hb_consumer_worker)
 
