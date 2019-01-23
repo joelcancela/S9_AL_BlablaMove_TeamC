@@ -47,3 +47,10 @@
 
 - Status flag: Green
 - Listed adjustments from the new specifications
+
+## Week 04: 21 January-25 January 2019
+
+- Status flag: Yellow 
+- Gatling integration need to be reworked (Version and Docker networking problems).
+- Front-End modification according new backend interfaces.
+- Python services has been switched to a new framework.
