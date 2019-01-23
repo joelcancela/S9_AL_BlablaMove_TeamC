@@ -7,6 +7,9 @@ import org.influxdb.dto.Query;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -39,14 +42,24 @@ public class MarketingWSTest {
                 .build();
         BlablamovebackendApplication.influxDB.write(p);
 
+        p = Point.measurement("delivery_issue").time(LocalDateTime.now().minusDays(2).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("issue_type", "test")
+                .addField("time", LocalDateTime.now().minusDays(2).toString())
+                .build();
+
+        BlablamovebackendApplication.influxDB.write(p);
+
         queryObject = new Query("Select * from delivery_issue", "blablamove");
         BlablamovebackendApplication.influxDB.query(queryObject);
     }
 
     @Test
-    public void getLast24hDeliveryIssues() {
+    public void getDeliveryIssues() {
         MarketingWS marketingWS = new MarketingWS();
         List<DeliveryIssue> deliveries = marketingWS.getLast24hDeliveryIssues();
         assertEquals(deliveries.size(),2);
+
+        deliveries = marketingWS.getIssuesByTimeframe(Date.from(LocalDateTime.now().minusDays(3).toInstant(ZoneOffset.UTC)), Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
+        assertEquals(deliveries.size(),3);
     }
 }
