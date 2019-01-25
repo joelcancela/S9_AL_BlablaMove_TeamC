@@ -21,7 +21,7 @@ __author__ = "Nikita ROUSSEAU"
 __copyright__ = "Copyright 2018, Polytech Nice Sophia"
 __credits__ = ["Nikita Rousseau"]
 __license__ = "MIT"
-__version__ = "1.0"
+__version__ = "2.0"
 __maintainer__ = "Nikita ROUSSEAU"
 __email__ = "nikita.rousseau@etu.unice.fr"
 __status__ = "development"
@@ -42,20 +42,14 @@ threads_mq = {}
 t_stop_event = threading.Event()
 
 
-def __sigint_handler(signal, frame):
+def __sigint_handler(sig, frame):
     """
     Catch CTR+C / KILL signals
     Do housekeeping before leaving
     """
-    print("SIGINT or SIGTERM catched")
-    print("Raise t_stop_event")
     t_stop_event.set()  # Set stop flag to true for all launched threads
-    print("Stopping daemons...")
-    # Waiting threads...
-    for t in threads:
-        t.join()
     sleep(1)
-    sys.exit(1)
+    os.kill(os.getpid(), signal.SIGTERM)
 
 
 signal.signal(signal.SIGINT, __sigint_handler)
@@ -181,10 +175,11 @@ if __name__ == '__main__':
     print(__product__ + ' version ' + __version__ + ' (' + env + ') is listening on socket "' + host + ':' + port + '"')
 
     # Http server
-    # No logs when set in production
-    log = open('app.log', 'a')
-    if env == 'production':
-        log = open('/dev/null', 'a')
-    app.run(host, port, log)
+    # log = open('app.log', 'a')
+    # if env == 'production':
+    #    log = open('/dev/null', 'a')
+    # app.run(host, port, log)
+
+    app.run(host, port)
 
     exit(0)
