@@ -3,14 +3,12 @@
 ### Author
 __Nikita ROUSSEAU__
 ### Updated
-__10:00 02/11/2018__
+__11:10 24/01/2019__
 
 ## Requirements
 
 - Python 3.6.x
-- Dependencies :
-  * flask
-  * kafka-python
+- Pip
 
 ### Install Dependencies
 
@@ -20,17 +18,11 @@ pip install --trusted-host pypi.python.org -r requirements.txt
 
 ## Deployment
 
-You can start the server in (`development`|`production`) environment. Set `FLASK_ENV` according to your needs.
+You can start the server in (`development`|`production`) environment.
 
 ```bash
-export FLASK_APP = app.py
-export FLASK_ENV = development
-export FLASK_DEBUG = 1
-
-$ python3 app.py
-
-[...]
-INFO:werkzeug: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+$ python3 app.py production
+[...] is listening on socket "localhost:5000"
 ```
 
 ## Api Documentation and Usage
