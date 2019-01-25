@@ -170,7 +170,8 @@ def post_delivery_issue(request):
     message, request_id = make_kafka_message(
         action='DELIVERY_ISSUE',
         message={
-            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY"
+            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",         'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
         }
     )
 
