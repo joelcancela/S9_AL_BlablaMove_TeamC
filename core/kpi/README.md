@@ -22,6 +22,7 @@ You can start the server in (`development`|`production`) environment.
 
 ```bash
 $ python3 app.py production
+[...] is listening on socket "localhost:5000"
 ```
 
 ## Api Documentation and Usage
