@@ -5,6 +5,7 @@ import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.Deliv
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ import static junit.framework.Assert.assertEquals;
  */
 public class MarketingWSTest {
 
+    @Ignore
     @Before
     public void init() throws Exception {
         BlablamovebackendApplication.main(new String[0]);
@@ -53,6 +55,7 @@ public class MarketingWSTest {
         BlablamovebackendApplication.influxDB.query(queryObject);
     }
 
+    @Ignore
     @Test
     public void getDeliveryIssues() {
         MarketingWS marketingWS = new MarketingWS();
