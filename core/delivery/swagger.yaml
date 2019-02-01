@@ -16,6 +16,25 @@ tags:
       description: Delivery related calls
 
 paths:
+    /route:
+        post:
+            tags:
+                - route
+            operationId: newRoute
+            description: Create a new route.
+            consumes:
+                - application/json
+            produces:
+                - application/json
+            responses:
+                200:
+                    description: puts a new message on the 'route' topic
+                    examples:
+                        kafka message:
+                            action: ROUTE_CREATED
+                            message:
+                                date: "2018-11-03 18:57:05.043943"
+                                delivery_id: 493
     /delivery:
         post:
             tags:
@@ -59,6 +78,7 @@ paths:
                                 date: "2018-11-03 19:13:37.374029"
                                 isFinalDestination: true
                                 request: 267632146774148875279637168125941151364
+
     /delivery/issue:
         post:
             tags:
