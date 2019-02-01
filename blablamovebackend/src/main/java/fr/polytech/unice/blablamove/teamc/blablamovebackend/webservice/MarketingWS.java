@@ -132,7 +132,7 @@ public class MarketingWS {
 				.toPOJO(queryResult, RouteCreated.class);
 
 		return deliveryIssueList.stream().filter(
-				deliveryIssue -> instantIsBetweenDates(
+				deliveryIssue -> !instantIsBetweenDates(
 						deliveryIssue.getTime(),
 						LocalDateTime.ofInstant(
 								to.toInstant(), ZoneOffset.UTC
@@ -160,7 +160,7 @@ public class MarketingWS {
 				.toPOJO(queryResult, RouteCanceled.class);
 
 		return deliveryIssueList.stream().filter(
-				deliveryIssue -> instantIsBetweenDates(
+				deliveryIssue -> !instantIsBetweenDates(
 						deliveryIssue.getTime(),
 						LocalDateTime.ofInstant(
 								to.toInstant(), ZoneOffset.UTC
