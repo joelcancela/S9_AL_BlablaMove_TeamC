@@ -3,7 +3,6 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.ConnectionLog;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
@@ -105,7 +104,7 @@ public class MarketingWS {
 				.toPOJO(queryResult, DeliveryIssue.class);
 
         return deliveryIssueList.stream().filter(
-        		deliveryIssue -> instantIsBetweenDates(
+        		deliveryIssue -> !instantIsBetweenDates(
         				deliveryIssue.getTime(),
 						LocalDateTime.ofInstant(
                                 to.toInstant(), ZoneOffset.UTC
