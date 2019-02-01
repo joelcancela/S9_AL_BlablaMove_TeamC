@@ -12,6 +12,7 @@ import java.time.Instant;
  */
 @Measurement(name = "user_logged_in")
 public class UserLoggedIn {
+
 	@Column(name = "time")
 	private Instant time;
 

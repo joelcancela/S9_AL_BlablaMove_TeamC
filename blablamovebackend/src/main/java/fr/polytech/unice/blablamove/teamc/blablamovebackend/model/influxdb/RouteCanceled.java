@@ -6,27 +6,21 @@ import org.influxdb.annotation.Measurement;
 import java.time.Instant;
 
 /**
- * Class DeliveryIssue
+ * Class RouteCanceled
  *
  * @author Tanguy Invernizzi
  */
 @Measurement(name = "delivery_issue")
-public class DeliveryIssue {
+public class RouteCanceled {
 
     /**
-     * The type of the issue.
+     * The id of this route.
      */
-    @Column(name = "issue_type")
-    private String issueType;
+    @Column(name = "route_uuid")
+    private String route_uuid;
 
     /**
-     * The id of this delivery.
-     */
-    @Column(name = "delivery_uuid")
-    private String delivery_uuid;
-
-    /**
-     * The time at which the issue happened.
+     * The time at which the route has been canceled.
      */
     @Column(name = "time")
     private Instant time;

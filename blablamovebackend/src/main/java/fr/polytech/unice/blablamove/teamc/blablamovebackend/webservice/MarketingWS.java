@@ -5,6 +5,8 @@ import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -101,7 +103,6 @@ public class MarketingWS {
 		List<DeliveryIssue> deliveryIssueList = resultMapper
 				.toPOJO(queryResult, DeliveryIssue.class);
 
-		// TODO : Find a better way to convert than with toString
         return deliveryIssueList.stream().filter(
         		deliveryIssue -> !instantIsBetweenDates(
         				deliveryIssue.getTime(),
@@ -111,6 +112,62 @@ public class MarketingWS {
 						LocalDateTime.ofInstant(
                                 from.toInstant(), ZoneOffset.UTC
                         )
+				)
+		).collect(Collectors.toList());
+	}
+
+	/**
+	 * Returns the routes created in a specific timeframe.
+	 * @param from The beginning of the timeframe.
+	 * @param to The end of the timeframe.
+	 * @return The routes created in the specific timeframe.
+	 */
+	@RequestMapping(path = "/specificCreatedRoutes", method = RequestMethod.GET)
+	public List<RouteCreated> GetRoutesCreatedByTimeframe(Date from, Date to) {
+		Query queryObject = new Query("Select * from created_routes", "blablamove");
+		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
+
+		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+		List<RouteCreated> deliveryIssueList = resultMapper
+				.toPOJO(queryResult, RouteCreated.class);
+
+		return deliveryIssueList.stream().filter(
+				deliveryIssue -> instantIsBetweenDates(
+						deliveryIssue.getTime(),
+						LocalDateTime.ofInstant(
+								to.toInstant(), ZoneOffset.UTC
+						),
+						LocalDateTime.ofInstant(
+								from.toInstant(), ZoneOffset.UTC
+						)
+				)
+		).collect(Collectors.toList());
+	}
+
+	/**
+	 * Returns the routes canceled in a specific timeframe.
+	 * @param from The beginning of the timeframe.
+	 * @param to The end of the timeframe.
+	 * @return The routes canceled in the specific timeframe.
+	 */
+	@RequestMapping(path = "/specificCanceledRoutes", method = RequestMethod.GET)
+	public List<RouteCanceled> GetRoutesCanceledByTimeframe(Date from, Date to) {
+		Query queryObject = new Query("Select * from canceled_routes", "blablamove");
+		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
+
+		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+		List<RouteCanceled> deliveryIssueList = resultMapper
+				.toPOJO(queryResult, RouteCanceled.class);
+
+		return deliveryIssueList.stream().filter(
+				deliveryIssue -> instantIsBetweenDates(
+						deliveryIssue.getTime(),
+						LocalDateTime.ofInstant(
+								to.toInstant(), ZoneOffset.UTC
+						),
+						LocalDateTime.ofInstant(
+								from.toInstant(), ZoneOffset.UTC
+						)
 				)
 		).collect(Collectors.toList());
 	}
