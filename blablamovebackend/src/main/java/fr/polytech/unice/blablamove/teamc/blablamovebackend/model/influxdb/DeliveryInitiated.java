@@ -19,6 +19,9 @@ public class DeliveryInitiated {
 	@Column(name = "city")
 	private String city;
 
+	/**
+	 * The id of this delivery.
+	 */
 	@Column(name = "delivery_uuid")
 	private String delivery_uuid;
 
