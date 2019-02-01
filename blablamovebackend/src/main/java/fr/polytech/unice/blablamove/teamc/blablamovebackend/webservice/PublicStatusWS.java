@@ -15,7 +15,7 @@ import java.util.Random;
 @RestController
 @RequestMapping(path = "/publicstatus")
 public class PublicStatusWS {
-
+    //TODO: joel: will do all
     @RequestMapping(path = "/last24hIncidents")
     public List<Pair<LocalDateTime,Integer>> getLast24hIncidents() {
         List<Pair<LocalDateTime, Integer>> report = new ArrayList<>();

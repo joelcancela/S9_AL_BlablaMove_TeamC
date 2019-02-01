@@ -44,6 +44,7 @@ public class MarketingWS {
 
 	@RequestMapping(path = "/cities", method = RequestMethod.GET)
 	public List<City> getAllActiveCities() {
+		//TODO: joel will do
 		return cities;
 	}
 

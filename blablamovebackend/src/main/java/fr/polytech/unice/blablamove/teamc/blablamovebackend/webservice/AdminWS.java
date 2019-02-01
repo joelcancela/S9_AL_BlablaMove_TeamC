@@ -24,7 +24,8 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin")
 public class AdminWS {
-
+	//TODO: nassim: heartbeat
+	//si y'a le time un objet Transaction qui regroupe delivery et route events
 	public AdminWS() {
 	}
 
