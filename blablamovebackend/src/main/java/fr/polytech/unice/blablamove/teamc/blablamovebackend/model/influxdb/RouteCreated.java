@@ -20,12 +20,6 @@ public class RouteCreated {
     private String issueType;
 
     /**
-     * The id identifying the delivery associated with this route.
-     */
-    @Column(name = "delivery_uuid")
-    private String delivery_uuid;
-
-    /**
      * The time at which the route has been created.
      */
     @Column(name = "time")

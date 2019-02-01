@@ -14,12 +14,6 @@ import java.time.Instant;
 public class RouteCanceled {
 
     /**
-     * The type of the issue.
-     */
-    @Column(name = "issue_type")
-    private String issueType;
-
-    /**
      * The time at which the route has been canceled.
      */
     @Column(name = "time")
