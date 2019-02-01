@@ -14,6 +14,12 @@ import java.time.Instant;
 public class RouteCanceled {
 
     /**
+     * The id of this route.
+     */
+    @Column(name = "route_uuid")
+    private String route_uuid;
+
+    /**
      * The time at which the route has been canceled.
      */
     @Column(name = "time")

@@ -14,10 +14,10 @@ import java.time.Instant;
 public class RouteCreated {
 
     /**
-     * The type of the issue.
+     * The id of this route.
      */
-    @Column(name = "issue_type")
-    private String issueType;
+    @Column(name = "route_uuid")
+    private String route_uuid;
 
     /**
      * The time at which the route has been created.
