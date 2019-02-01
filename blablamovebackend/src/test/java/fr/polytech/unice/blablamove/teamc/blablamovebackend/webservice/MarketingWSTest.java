@@ -57,7 +57,7 @@ public class MarketingWSTest {
 
     @Ignore
     @Test
-    public void getDeliveryIssues() {
+    public void getDeliveryIssuesTest() {
         MarketingWS marketingWS = new MarketingWS();
         List<DeliveryIssue> deliveries = marketingWS.getLast24hDeliveryIssues();
         assertEquals(deliveries.size(),2);

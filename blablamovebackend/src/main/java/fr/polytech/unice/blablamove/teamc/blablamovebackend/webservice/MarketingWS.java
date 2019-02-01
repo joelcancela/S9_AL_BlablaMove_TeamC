@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -102,8 +103,17 @@ public class MarketingWS {
 				.toPOJO(queryResult, DeliveryIssue.class);
 
 		// TODO : Find a better way to convert than with toString
-
-        return deliveryIssueList.stream().filter(deliveryIssue -> instantIsBetweenDates(deliveryIssue.getTime(), LocalDateTime.parse(from.toString()), LocalDateTime.parse(to.toString()))).collect(Collectors.toList());
+        return deliveryIssueList.stream().filter(
+        		deliveryIssue -> instantIsBetweenDates(
+        				deliveryIssue.getTime(),
+						LocalDateTime.ofInstant(
+                                to.toInstant(), ZoneOffset.UTC
+						),
+						LocalDateTime.ofInstant(
+                                from.toInstant(), ZoneOffset.UTC
+                        )
+				)
+		).collect(Collectors.toList());
 	}
 
 	private boolean instantIsBetweenDates(Instant instant, LocalDateTime start, LocalDateTime stop) {
