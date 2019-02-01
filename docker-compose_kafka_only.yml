@@ -5,7 +5,6 @@ services:
     image: wurstmeister/zookeeper
     ports:
       - 2181:2181
-
   kafka:
     image: wurstmeister/kafka
     links:
@@ -17,7 +16,18 @@ services:
       KAFKA_ADVERTISED_PORT: "9092"
       KAFKA_CREATE_TOPICS: "topic:1:1,user:1:1,delivery:1:1"
       KAFKA_ZOOKEEPER_CONNECT: "zk:2181"
-
+  influxdb:
+    image: influxdb
+    healthcheck:
+      test: 'curl -sL -I localhost:8086/ping | grep "204 No Content"'
+      interval: 3s
+      retries: 2
+    ports:
+      - 8086:8086
+    environment:
+      INFLUXDB_ADMIN_ENABLED: "true"
+      INFLUXDB_ADMIN_USER: "admin"
+      INFLUXDB_ADMIN_PASSWORD: "admin"
 # Add to containers talking to Kafka:
 # links:
 #     - kafka
