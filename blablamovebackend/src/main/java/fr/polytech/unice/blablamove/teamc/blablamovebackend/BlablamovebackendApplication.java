@@ -14,33 +14,34 @@ import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
 public class BlablamovebackendApplication {
-    public static InfluxDB influxDB;
-    public static void main(String[] args) throws Exception {
-        ConfigurableApplicationContext context = SpringApplication.run(BlablamovebackendApplication.class, args);
-        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
-        Consumer consumer = context.getBean(Consumer.class);
-        Sender sender = context.getBean(Sender.class);
+	public static InfluxDB influxDB;
 
-        consumer.latchDelivery(10, TimeUnit.SECONDS);
-        consumer.latchUser(10, TimeUnit.SECONDS);
+	public static void main(String[] args) throws Exception {
+		ConfigurableApplicationContext context = SpringApplication.run(BlablamovebackendApplication.class, args);
+		TimeZone.setDefault(TimeZone.getTimeZone("Europe/Paris"));
+		Consumer consumer = context.getBean(Consumer.class);
+		Sender sender = context.getBean(Sender.class);
 
-        influxDB = InfluxDBFactory.connect("http://influxdb:8086", "admin", "admin");
-        influxDB.createRetentionPolicy("defaultPolicy", "baeldung", "30d", 1, true);
-        influxDB.setLogLevel(InfluxDB.LogLevel.NONE);
-        Pong response = influxDB.ping();
-        if (response.getVersion().equalsIgnoreCase("unknown")) {
-            System.out.println("Error pinging server.");
-            return;
-        } else {
-            System.out.println(response.getVersion());
-        }
+		consumer.latchDelivery(10, TimeUnit.SECONDS);
+		consumer.latchUser(10, TimeUnit.SECONDS);
+		System.out.println("Connecting to InfluxDB");
+		influxDB = InfluxDBFactory.connect("http://influxdb:8086", "admin", "admin");
+		influxDB.createRetentionPolicy("defaultPolicy", "baeldung", "30d", 1, true);
+		influxDB.setLogLevel(InfluxDB.LogLevel.NONE);
+		Pong response = influxDB.ping();
+		if (response.getVersion().equalsIgnoreCase("unknown")) {
+			System.out.println("Error pinging server.");
+			return;
+		} else {
+			System.out.println("Connected to InfluxDB version " + response.getVersion());
+		}
 
-        if (!influxDB.databaseExists("blablamove")) {
-            influxDB.createDatabase("blablamove");
-            System.out.println("Will create blablamove database");
-        }
-        influxDB.setDatabase("blablamove");
+		if (!influxDB.databaseExists("blablamove")) {
+			influxDB.createDatabase("blablamove");
+			System.out.println("Will create blablamove database");
+		}
+		influxDB.setDatabase("blablamove");
 
-        //influxDB.close();
-    }
+		//influxDB.close();
+	}
 }
