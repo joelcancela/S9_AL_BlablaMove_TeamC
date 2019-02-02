@@ -9,6 +9,7 @@ import {MarketingComponent} from './marketing/marketing.component';
 import {AdminComponent} from './admin/admin.component';
 import {MarketingModule} from './marketing/marketing.module';
 import {NgxChartsModule} from '@swimlane/ngx-charts';
+import { InfrastructureCheckerComponent } from './admin/infrastructure-checker/infrastructure-checker.component';
 
 
 const PAGES_COMPONENTS = [
@@ -28,6 +29,7 @@ const PAGES_COMPONENTS = [
     ...PAGES_COMPONENTS,
     MarketingComponent,
     AdminComponent,
+    InfrastructureCheckerComponent,
   ],
 })
 export class PagesModule {
