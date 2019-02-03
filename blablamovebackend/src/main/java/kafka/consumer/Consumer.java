@@ -35,6 +35,8 @@ public class Consumer {
                 storeDeliveryInitiation(msg);
             } else if (msg.getAction().equals("DELIVERY_ISSUE")) {
                 storeDeliveryIssue(msg);
+            } else if (msg.getAction().equals("HEARTBEAT_REPLY")) {
+                LOG.info("HEARTBEAT RECEIVED : ", msg.getMessage());
             }
         } catch (JsonSyntaxException e) {
             LOG.error("Error while parsing received message");

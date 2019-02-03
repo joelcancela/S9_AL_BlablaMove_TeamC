@@ -3,11 +3,16 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.dto.ReportIssueRequest;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.IssueReported;
+import kafka.consumer.Message;
+import kafka.producer.Sender;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,9 +25,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+@EnableScheduling
 @RestController
 @RequestMapping(path = "/publicstatus")
 public class PublicStatusWS {
+
+
+	@Autowired
+	private Sender sender;
+
+	@Scheduled(cron = "*/10 * * * * *")
+	public void requestHeartBeat() {
+		//System.out.println("HEARTBEAT MARKETING !");
+		Message heartbeatMessage = new Message("HEARTBEAT_BROADCAST", "Marketing");
+		sender.send(heartbeatMessage);
+	}
+
 	@RequestMapping(path = "/last24hIncidents")
 	public List<Pair<LocalDateTime, Long>> getLast24hIncidents() {
 		List<Pair<LocalDateTime, Long>> report = new ArrayList<>();

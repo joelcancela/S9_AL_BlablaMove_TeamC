@@ -1,6 +1,7 @@
 package kafka.producer;
 
 
+import kafka.consumer.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,15 @@ public class Sender {
     private static final Logger LOG = LoggerFactory.getLogger(Sender.class);
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, Message> kafkaTemplate;
 
-    @Value("${message.topic.user}")
+    @Value(value = "${message.topic.heartbeat}")
     private String topic;
 
     public Sender() {
     }
 
-    public void send(String message) {
+    public void send(Message message) {
         LOG.info("sending message='{}' to topic='{}'", message, topic);
         kafkaTemplate.send(topic, message);
     }
