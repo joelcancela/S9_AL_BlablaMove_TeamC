@@ -1,4 +1,7 @@
 #!/bin/bash
+
+docker login
+
 cd ./kpi
 docker build -t blablamove/api-gateway/core/kpi .
 docker push blablamove/api-gateway/core/kpi
