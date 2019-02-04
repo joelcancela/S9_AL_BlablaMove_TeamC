@@ -3,16 +3,16 @@
 docker login
 
 cd ./kpi
-docker build -t blablamove/api-gateway/core/kpi .
-docker push blablamove/api-gateway/core/kpi
+docker build -t blablamove/core-kpi .
+docker push blablamove/core-kpi:latest
 cd ..
 
 cd ./delivery
-docker build -t blablamove/api-gateway/core/delivery .
-docker push blablamove/api-gateway/core/delivery
+docker build -t blablamove/core-delivery .
+docker push blablamove/core-delivery:latest
 cd ..
 
 cd ./user
-docker build -t blablamove/api-gateway/core/user .
-docker push blablamove/api-gateway/core/user
+docker build -t blablamove/core-user .
+docker push blablamove/core-user:latest
 cd ..

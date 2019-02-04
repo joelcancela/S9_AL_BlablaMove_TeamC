@@ -1,4 +1,4 @@
 #!/bin/bash
-docker pull blablamove/api-gateway/core/kpi:latest
-docker pull blablamove/api-gateway/core/delivery:latest
-docker pull blablamove/api-gateway/core/user:latest
+docker pull blablamove/core-kpi:latest
+docker pull blablamove/core-delivery:latest
+docker pull blablamove/core-user:latest
