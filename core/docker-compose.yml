@@ -1,0 +1,23 @@
+version: "2.1"
+
+services:
+  kpi:
+    container_name: al_kpi
+    image: "al/fe/core/kpi"
+    ports:
+      - "5000:5000"
+
+  user:
+    container_name: al_user
+    image: "al/fe/core/user"
+    ports:
+      - "5001:5000"
+
+  delivery:
+    container_name: al_delivery
+    image: "al/fe/core/delivery"
+    ports:
+      - "5002:5000"
+
+  extra_hosts:
+  - "kafka:10.132.0.2"
