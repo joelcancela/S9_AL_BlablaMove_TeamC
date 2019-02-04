@@ -2,20 +2,20 @@ version: "2.1"
 
 services:
   kpi:
-    container_name: al_kpi
-    image: "al/fe/core/kpi"
+    container_name: core_kpi
+    image: "blablamove/api-gateway/core/kpi"
     ports:
       - "5000:5000"
 
   user:
-    container_name: al_user
-    image: "al/fe/core/user"
+    container_name: core_user
+    image: "blablamove/api-gateway/core/user"
     ports:
       - "5001:5000"
 
   delivery:
-    container_name: al_delivery
-    image: "al/fe/core/delivery"
+    container_name: core_delivery
+    image: "blablamove/api-gateway/core/delivery"
     ports:
       - "5002:5000"
 
