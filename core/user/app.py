@@ -76,13 +76,16 @@ def __load_config():
 
 
 # We are serving a static file, branch=True is required
-@app.route('/', branch=True)
+@app.route('/user/api',
+           methods=['GET'],
+           branch=True)
 def root_route(request):
     # API DOCUMENTATION ROOT
     return File('./swagger')
 
 
-@app.route('/status')
+# Health check
+@app.route('/user/healthz')
 def status_route(request):
     return '200 OK'
 
