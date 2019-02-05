@@ -37,7 +37,7 @@ public class PublicStatusWS {
 	@Scheduled(cron = "*/10 * * * * *")
 	public void requestHeartBeat() {
 		//System.out.println("HEARTBEAT MARKETING !");
-		Message heartbeatMessage = new Message("HEARTBEAT_BROADCAST", "Marketing");
+		Message heartbeatMessage = new Message("HEARTBEAT_BROADCAST", null);
 		sender.send(heartbeatMessage);
 	}
 
