@@ -74,7 +74,6 @@ public class Consumer {
         Point p = Point.measurement("heartbeat")
                         .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                         .addField("service_name", heartbeat_reply.getService_name())
-                        .addField("timestamp", heartbeat_reply.getTimestamp())
                         .build();
         saveToInfluxDB(p);
     }
