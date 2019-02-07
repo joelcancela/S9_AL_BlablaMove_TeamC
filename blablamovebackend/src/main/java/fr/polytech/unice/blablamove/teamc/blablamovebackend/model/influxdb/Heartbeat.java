@@ -1,19 +1,22 @@
 package fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb;
 
+import org.influxdb.annotation.Column;
 import org.influxdb.annotation.Measurement;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Measurement(name = "heartbeat")
 public class Heartbeat {
-    public LocalDateTime time;
+    @Column(name = "time")
+    public Instant time;
+    @Column(name = "service_name")
     public String service_name;
 
-    public LocalDateTime getTime() {
+    public Instant getTime() {
         return time;
     }
 
-    public void setTime(LocalDateTime time) {
+    public void setTime(Instant time) {
         this.time = time;
     }
 
