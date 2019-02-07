@@ -140,7 +140,11 @@ public class Consumer {
     }
 
     private void saveToInfluxDB(Point p) {
-        BlablamovebackendApplication.influxDB.write(p);
+        try {
+            BlablamovebackendApplication.influxDB.write(p);
+        } catch (NullPointerException e) {
+            LOG.error("Tried to write into influxdb before connection");
+        }
     }
 
 }

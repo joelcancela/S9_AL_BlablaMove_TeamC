@@ -7,6 +7,7 @@ import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.Deliv
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
+import kafka.consumer.HEARTBEAT_REPLY;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -94,18 +95,19 @@ public class MarketingWS {
 	 * @return The last heartbeat
 	 */
 	@RequestMapping(path = "/heartbeat", method = RequestMethod.GET)
-	public void getLastHeartbeat() {
-		Query queryObject = new Query("Select * from heartbeat", "blablamove");
+	public List<HEARTBEAT_REPLY> getLastHeartbeat() {
+		Query queryObject = new Query("Select last(service_name, timestamp) from heartbeat where service_name = 'Core Delivery'", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
 		System.out.println("queryResult : " + queryResult);
-		//List<DeliveryIssue> deliveryIssueList = resultMapper
+		//List<DeliveryIssue> deliveryIssueList = resultMappers
 		//		.toPOJO(queryResult, DeliveryIssue.class);
+		List<HEARTBEAT_REPLY> heartbeat_replies = resultMapper.toPOJO(queryResult, HEARTBEAT_REPLY.class);
 
 		LocalDateTime stop = LocalDateTime.now().minusHours(0);
 		LocalDateTime start = LocalDateTime.now().minusHours(24).withSecond(0).withMinute(0).withNano(0);
-
+		return heartbeat_replies;
 		//return deliveryIssueList.stream().filter(deliveryIssue -> instantIsBetweenDates(deliveryIssue.getTime(), start, stop)).collect(Collectors.toList());
 	}
 
