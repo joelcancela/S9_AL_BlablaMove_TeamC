@@ -63,3 +63,12 @@
 - Benchmark and compare old results versus new ones
 - Write and complete advanced benchkmarking results
 - Conception des interfaces J2E réalisées
+
+
+## Week 06: 04 February - 08 February 2019
+
+- Status flag : Green
+- Heartbeat (backend) fully implemented
+- Heartbeat (frontend) must be implemented
+- Google cloud deployment has been partially done
+- Region configuration into google cloud needs to be completed
