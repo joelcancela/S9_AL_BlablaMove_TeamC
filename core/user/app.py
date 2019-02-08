@@ -246,7 +246,7 @@ if __name__ == '__main__':
     for t in threads:
         t.start()
 
-    print(__product__ + ' version ' + __version__ + ' (' + env + ') is listening on socket "' + host + ':' + port + '"')
+    print('[' + region + '] ' + __product__ + ' version ' + __version__ + ' (' + env + ') is listening "' + host + ':' + port + '"')
 
     # Http server
     # log = open('app.log', 'a')
