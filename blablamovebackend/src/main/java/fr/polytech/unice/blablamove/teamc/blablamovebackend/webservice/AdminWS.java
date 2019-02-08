@@ -58,6 +58,10 @@ public class AdminWS {
 	 */
 	@RequestMapping(path = "/heartbeats", method = RequestMethod.GET)
 	public List<Heartbeat> getLastHeartbeats() {
+		if(BlablamovebackendApplication.influxDB == null){//Avoid stack trace when front end requests and the
+			// connection to influxdb is not ready
+			return new ArrayList<>();
+		}
 		Query queryObject_delivery = new Query("Select * from heartbeat where service_name = 'Core Delivery' order by desc limit 1", "blablamove");
 		Query queryObject_kpi = new Query("Select * from heartbeat where service_name = 'Core KPI' order by desc limit 1", "blablamove");
 		Query queryObject_user = new Query("Select * from heartbeat where service_name = 'Core User' order by desc limit 1", "blablamove");
