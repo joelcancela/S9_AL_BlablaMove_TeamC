@@ -8,6 +8,7 @@ services:
       - "5000:5000"
     extra_hosts:
       - "kafka:10.132.0.2"
+    command: app.py production world
 
   user:
     container_name: core_user
@@ -16,6 +17,7 @@ services:
       - "5001:5000"
     extra_hosts:
       - "kafka:10.132.0.2"
+    command: app.py production world
 
   delivery:
     container_name: core_delivery
@@ -24,3 +26,4 @@ services:
       - "5002:5000"
     extra_hosts:
       - "kafka:10.132.0.2"
+    command: app.py production world
