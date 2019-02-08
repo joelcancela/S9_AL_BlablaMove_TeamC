@@ -2,6 +2,7 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.ConnectionLog;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.Heartbeat;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.UserLoggedIn;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -49,6 +50,31 @@ public class AdminWS {
 		}
 
 		return connections;
+	}
+
+	/**
+	 * Returns the last heartbeats
+	 * @return The last heartbeat
+	 */
+	@RequestMapping(path = "/heartbeats", method = RequestMethod.GET)
+	public List<Heartbeat> getLastHeartbeats() {
+		Query queryObject_delivery = new Query("Select * from heartbeat where service_name = 'Core Delivery' order by desc limit 1", "blablamove");
+		Query queryObject_kpi = new Query("Select * from heartbeat where service_name = 'Core KPI' order by desc limit 1", "blablamove");
+		Query queryObject_user = new Query("Select * from heartbeat where service_name = 'Core User' order by desc limit 1", "blablamove");
+		QueryResult queryResult_delivery = BlablamovebackendApplication.influxDB.query(queryObject_delivery);
+		QueryResult queryResult_kpi = BlablamovebackendApplication.influxDB.query(queryObject_kpi);
+		QueryResult queryResult_user = BlablamovebackendApplication.influxDB.query(queryObject_user);
+		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+		List<Heartbeat> heartbeat_replies = new ArrayList<>();
+		List<Heartbeat> heartbeat_delivery = resultMapper.toPOJO(queryResult_delivery, Heartbeat.class);
+		List<Heartbeat> heartbeat_kpi = resultMapper.toPOJO(queryResult_kpi, Heartbeat.class);
+		List<Heartbeat> heartbeat_user = resultMapper.toPOJO(queryResult_user, Heartbeat.class);
+		heartbeat_replies.addAll(heartbeat_delivery);
+		heartbeat_replies.addAll(heartbeat_kpi);
+		heartbeat_replies.addAll(heartbeat_user);
+		System.out.println("Object : ");
+		heartbeat_replies.stream().forEach(System.out::println);
+		return heartbeat_replies;
 	}
 
 	private boolean instantIsBetweenDates(Instant instant, LocalDateTime start, LocalDateTime stop) {

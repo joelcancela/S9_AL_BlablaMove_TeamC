@@ -88,28 +88,6 @@ public class MarketingWS {
 	}
 
 	/**
-	 * Returns the last heartbeat for the marketing core
-	 * @return The last heartbeat
-	 */
-	@RequestMapping(path = "/heartbeat", method = RequestMethod.GET)
-	public List<Heartbeat> getLastHeartbeat() {
-		//Query queryObject = new Query("Select last(service_name, timestamp) from heartbeat where service_name = 'Core Delivery'", "blablamove");
-		Query queryObject = new Query("Select * from heartbeat where service_name = 'Core Delivery'", "blablamove");
-		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
-
-		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		System.out.println("queryResult : " + queryResult);
-		List<Heartbeat> heartbeat_replies = resultMapper.toPOJO(queryResult, Heartbeat.class);
-		queryResult.getResults().stream().forEach(System.out::println);
-		System.out.println("Object : ");
-		heartbeat_replies.stream().forEach(System.out::println);
-		LocalDateTime stop = LocalDateTime.now().minusHours(0);
-		LocalDateTime start = LocalDateTime.now().minusHours(24).withSecond(0).withMinute(0).withNano(0);
-		return heartbeat_replies;
-		//return deliveryIssueList.stream().filter(deliveryIssue -> instantIsBetweenDates(deliveryIssue.getTime(), start, stop)).collect(Collectors.toList());
-	}
-
-	/**
 	 * Returns the delivery issues in a specific timeframe.
 	 * @param from The beginning of the timeframe.
 	 * @param to The end of the timeframe.
