@@ -125,6 +125,11 @@ if __name__ == '__main__':
     else:
         env = 'development'
 
+    # REGION
+    region = "world"
+    if len(sys.argv) > 2:
+        region = str(sys.argv[2])
+
     # CONFIGURATION
     app_config_raw = __load_config()
     app_config = app_config_raw[env]
@@ -165,7 +170,7 @@ if __name__ == '__main__':
         name='kafka_heartbeat_consumer_worker',
         daemon=True,
         target=kafka_consumer_worker,
-        args=(t_stop_event, bootstrap_servers, 'heartbeat', __product__, threads_mq)
+        args=(t_stop_event, bootstrap_servers, 'heartbeat', region, __product__, threads_mq)
     )
     threads.append(t_kafka_hb_consumer_worker)
 
@@ -175,7 +180,7 @@ if __name__ == '__main__':
     for t in threads:
         t.start()
 
-    print(__product__ + ' version ' + __version__ + ' (' + env + ') is listening on socket "' + host + ':' + port + '"')
+    print('[' + region + '] ' + __product__ + ' version ' + __version__ + ' (' + env + ') is listening "' + host + ':' + port + '"')
 
     # Http server
     # log = open('app.log', 'a')
