@@ -54,3 +54,21 @@
 - Gatling integration need to be reworked (Version and Docker networking problems).
 - Front-End modification according new backend interfaces.
 - Python services has been switched to a new framework.
+
+## Week 05: 28 January-01 February 2019
+
+- Status flag: Yellow 
+- Working on a real world implementation on Amazon Web Services (Regional Load balacing)
+- Gatling integration is now working
+- Benchmark and compare old results versus new ones
+- Write and complete advanced benchkmarking results
+- Conception des interfaces J2E réalisées
+
+
+## Week 06: 04 February - 08 February 2019
+
+- Status flag : Green
+- Heartbeat (backend) fully implemented
+- Heartbeat (frontend) must be implemented
+- Google cloud deployment has been partially done
+- Region configuration into google cloud needs to be completed

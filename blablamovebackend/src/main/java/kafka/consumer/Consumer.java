@@ -19,6 +19,7 @@ public class Consumer {
 
     private CountDownLatch latchDelivery = new CountDownLatch(3);
     private CountDownLatch latchUser = new CountDownLatch(3);
+    private CountDownLatch latchHeartBeat = new CountDownLatch(3);
 
     /**
      * This method is called whenever a message is received on the Kafka topic associated with deliveries.
@@ -35,13 +36,46 @@ public class Consumer {
                 storeDeliveryInitiation(msg);
             } else if (msg.getAction().equals("DELIVERY_ISSUE")) {
                 storeDeliveryIssue(msg);
-            } else if (msg.getAction().equals("HEARTBEAT_REPLY")) {
-                LOG.info("HEARTBEAT RECEIVED : ", msg.getMessage());
             }
         } catch (JsonSyntaxException e) {
             LOG.error("Error while parsing received message");
         }
         latchDelivery.countDown();
+    }
+
+    /**
+     * This method is called whenever a message is received on the Kafka topic associated with heartbeats.
+     *
+     * @param message The message received on the message bus.
+     */
+    @KafkaListener(topics = "${message.topic.heartbeat}", containerFactory = "KafkaListenerContainerFactory")
+    public void listenHeartBeat(String message) {
+        LOG.info("Received Message in topic 'heartbeat': " + message);
+        Gson gson = new GsonBuilder().create();
+        try {
+            Message msg = gson.fromJson(message, Message.class);
+            if (msg.getAction().equals("HEARTBEAT_REPLY")) {
+                processHeartbeat(msg);
+                //LOG.info("HEARTBEAT RECEIVED : ", heartbeat_reply);
+            }
+        } catch (JsonSyntaxException e) {
+            LOG.error("Error while parsing received message");
+        }
+        latchHeartBeat.countDown();
+    }
+
+    private void processHeartbeat(Message msg) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
+        HEARTBEAT_REPLY heartbeat_reply = new HEARTBEAT_REPLY();
+        heartbeat_reply.setRequest((Double)linkedTreeMap.get("request"));
+        heartbeat_reply.setTimestamp((Double)linkedTreeMap.get("timestamp"));
+        heartbeat_reply.setService_name((String)linkedTreeMap.get("service_name"));
+        LOG.info("RECEIVED : " + heartbeat_reply.toString());
+        Point p = Point.measurement("heartbeat")
+                        .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                        .addField("service_name", heartbeat_reply.getService_name())
+                        .build();
+        saveToInfluxDB(p);
     }
 
     /**
@@ -105,7 +139,11 @@ public class Consumer {
     }
 
     private void saveToInfluxDB(Point p) {
-        BlablamovebackendApplication.influxDB.write(p);
+        try {
+            BlablamovebackendApplication.influxDB.write(p);
+        } catch (NullPointerException e) {
+            LOG.error("Tried to write into influxdb before connection");
+        }
     }
 
 }

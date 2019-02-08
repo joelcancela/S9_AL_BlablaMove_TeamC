@@ -1,6 +1,6 @@
 <div [ngClass]="{ 'alert-success': lastHourProblems==0, 'alert-danger': lastHourProblems>0 }" class="alert">
   <span *ngIf="!lastHourProblems">No problems at BlablaMove</span>
-  <span *ngIf="lastHourProblems">{{lastHourProblems}} problem</span><span *ngIf="lastHourProblems>1">s</span><span *ngIf="lastHourProblems"> reported the last past hour at BlablaMove</span>
+  <span *ngIf="lastHourProblems">{{lastHourProblems}} problem</span><span *ngIf="lastHourProblems>1">s</span><span *ngIf="lastHourProblems"> reported the last hour at BlablaMove</span>
   <br><span>Last update: {{lastUpdate}}</span>
 </div>
 <ngx-charts-line-chart [results]="data" [view]="view"
@@ -16,4 +16,5 @@
                        [yScaleMin]="yScaleMin"
                        [yScaleMax]="yScaleMax"
                        [timeline]="timeline"></ngx-charts-line-chart>
-<a class="btn btn-danger" (click)="reportProblem()"><i class="fas fa-thumbs-down"></i> I have a problem with BlablaMove</a>
+<a class="btn btn-danger" (click)="reportProblem()"><i class="fas fa-thumbs-down"></i> I have a problem with BlablaMove</a><br>
+<span class="green" [hidden]="!reportSent">Report sent</span>
