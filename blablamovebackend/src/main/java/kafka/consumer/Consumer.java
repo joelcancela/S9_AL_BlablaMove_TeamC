@@ -119,7 +119,7 @@ public class Consumer {
     private void storeRouteCreated(Message msg) {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("route_created").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("issue_type", linkedTreeMap.get("issue_type").toString())
+                .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
                 .build();
         saveToInfluxDB(p);
     }
@@ -132,7 +132,7 @@ public class Consumer {
     private void storeRouteCanceled(Message msg) {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("route_canceled").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-                .addField("issue_type", linkedTreeMap.get("issue_type").toString())
+                .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
                 .build();
         saveToInfluxDB(p);
     }
