@@ -41,6 +41,7 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.dashboardAdminService.getLast24Connections().subscribe(response => this.adaptData(response));
+    document.getElementById("chartdiv").scrollLeft = 500;
   }
 
   formatDate(dateString) {
