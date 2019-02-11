@@ -72,7 +72,8 @@ def __load_config():
     """
     Parse database configuration file
     """
-    config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.ini")
+    config_file = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), "config.ini")
     if not os.path.exists(config_file):
         raise FileNotFoundError(config_file)
     app_config = configparser.ConfigParser()
@@ -164,7 +165,7 @@ def post_delivery_issue(request):
     message, request_id = make_kafka_message(
         action='DELIVERY_ISSUE',
         message={
-            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",         'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
         }
     )
@@ -197,7 +198,8 @@ if __name__ == '__main__':
 
     # Bootstrap servers
     if ',' in str(app_config['bootstrap_servers']):
-        bootstrap_servers = list(filter(None, str(app_config['bootstrap_servers']).split(',')))
+        bootstrap_servers = list(
+            filter(None, str(app_config['bootstrap_servers']).split(',')))
     else:
         bootstrap_servers.append(str(app_config['bootstrap_servers']))
 
@@ -228,7 +230,8 @@ if __name__ == '__main__':
         name='kafka_heartbeat_consumer_worker',
         daemon=True,
         target=kafka_consumer_worker,
-        args=(t_stop_event, bootstrap_servers, 'heartbeat', __product__, threads_mq)
+        args=(t_stop_event, bootstrap_servers,
+              'heartbeat', __product__, threads_mq)
     )
     threads.append(t_kafka_hb_consumer_worker)
 
@@ -238,7 +241,8 @@ if __name__ == '__main__':
     for t in threads:
         t.start()
 
-    print(__product__ + ' version ' + __version__ + ' (' + env + ') is listening on socket "' + host + ':' + port + '"')
+    print(__product__ + ' version ' + __version__ + ' (' + env +
+          ') is listening on socket "' + host + ':' + port + '"')
 
     # Http server
     # log = open('app.log', 'a')
