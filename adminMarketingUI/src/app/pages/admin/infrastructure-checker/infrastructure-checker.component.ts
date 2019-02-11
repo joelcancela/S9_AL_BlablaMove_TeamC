@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {HeartbeatService} from './heartbeat.service';
-import {RunningStatus} from './RunningStatus';
+import { Component, OnInit } from '@angular/core';
+import { HeartbeatService } from './heartbeat.service';
+import { RunningStatus } from './RunningStatus';
 
 @Component({
   selector: 'infrastructure-checker',
@@ -16,11 +16,18 @@ export class InfrastructureCheckerComponent implements OnInit {
   uk_core_delivery_running = RunningStatus.Unknown;
   uk_core_KPI_running = RunningStatus.Unknown;
   uk_core_user_running = RunningStatus.Unknown;
+  seconds_to_update = 10;
 
   constructor(private heartBeatService: HeartbeatService) {
     setInterval(() => {
       this.refreshHeartbeatStatus();
     }, 10000);
+    setInterval(() => {
+      if (this.seconds_to_update == 0) {
+        this.seconds_to_update = 10;
+      }
+      this.seconds_to_update--;
+    }, 1000)
   }
 
   ngOnInit() {

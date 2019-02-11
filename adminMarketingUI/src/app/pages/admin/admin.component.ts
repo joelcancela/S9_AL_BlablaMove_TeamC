@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {DashboardAdminService} from '../../services/dashboard-admin.service';
+import { Component, OnInit } from '@angular/core';
+import { DashboardAdminService } from '../../services/dashboard-admin.service';
 
 @Component({
   selector: 'ngx-admin',
@@ -8,7 +8,7 @@ import {DashboardAdminService} from '../../services/dashboard-admin.service';
 })
 export class AdminComponent implements OnInit {
 
-  timeOptions = {hour: '2-digit', minute: '2-digit'};
+  timeOptions = { hour: '2-digit', minute: '2-digit' };
   // ngx-charts-line-chart options
   data = [
     {
@@ -41,6 +41,9 @@ export class AdminComponent implements OnInit {
 
   ngOnInit() {
     this.dashboardAdminService.getLast24Connections().subscribe(response => this.adaptData(response));
+    setInterval(function () {
+      document.getElementById("chartdiv").scrollLeft = 500;
+    }, 500);
   }
 
   formatDate(dateString) {
