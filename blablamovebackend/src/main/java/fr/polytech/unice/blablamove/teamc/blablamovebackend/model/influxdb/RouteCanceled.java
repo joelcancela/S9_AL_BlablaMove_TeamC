@@ -10,7 +10,7 @@ import java.time.Instant;
  *
  * @author Tanguy Invernizzi
  */
-@Measurement(name = "delivery_issue")
+@Measurement(name = "route_canceled")
 public class RouteCanceled {
 
     /**

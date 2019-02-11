@@ -122,17 +122,17 @@ public class MarketingWS {
 	 * @return The routes created in the specific timeframe.
 	 */
 	@RequestMapping(path = "/specificCreatedRoutes", method = RequestMethod.GET)
-	public List<RouteCreated> GetRoutesCreatedByTimeframe(Date from, Date to) {
-		Query queryObject = new Query("Select * from created_routes", "blablamove");
+	public List<RouteCreated> getRoutesCreatedByTimeframe(Date from, Date to) {
+		Query queryObject = new Query("Select * from route_created", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		List<RouteCreated> deliveryIssueList = resultMapper
+		List<RouteCreated> routeCreatedList = resultMapper
 				.toPOJO(queryResult, RouteCreated.class);
 
-		return deliveryIssueList.stream().filter(
-				deliveryIssue -> !instantIsBetweenDates(
-						deliveryIssue.getTime(),
+		return routeCreatedList.stream().filter(
+				routeCreated -> !instantIsBetweenDates(
+						routeCreated.getTime(),
 						LocalDateTime.ofInstant(
 								to.toInstant(), ZoneOffset.UTC
 						),
@@ -150,17 +150,17 @@ public class MarketingWS {
 	 * @return The routes canceled in the specific timeframe.
 	 */
 	@RequestMapping(path = "/specificCanceledRoutes", method = RequestMethod.GET)
-	public List<RouteCanceled> GetRoutesCanceledByTimeframe(Date from, Date to) {
-		Query queryObject = new Query("Select * from canceled_routes", "blablamove");
+	public List<RouteCanceled> getRoutesCanceledByTimeframe(Date from, Date to) {
+		Query queryObject = new Query("Select * from route_canceled", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		List<RouteCanceled> deliveryIssueList = resultMapper
+		List<RouteCanceled> routeCanceledList = resultMapper
 				.toPOJO(queryResult, RouteCanceled.class);
 
-		return deliveryIssueList.stream().filter(
-				deliveryIssue -> !instantIsBetweenDates(
-						deliveryIssue.getTime(),
+		return routeCanceledList.stream().filter(
+				routeCanceled -> !instantIsBetweenDates(
+						routeCanceled.getTime(),
 						LocalDateTime.ofInstant(
 								to.toInstant(), ZoneOffset.UTC
 						),

@@ -36,6 +36,10 @@ public class Consumer {
                 storeDeliveryInitiation(msg);
             } else if (msg.getAction().equals("DELIVERY_ISSUE")) {
                 storeDeliveryIssue(msg);
+            } else if (msg.getAction().equals("ROUTE_CREATED")) {
+                storeRouteCreated(msg);
+            } else if (msg.getAction().equals("ROUTE_CANCELED")) {
+                storeRouteCanceled(msg);
             }
         } catch (JsonSyntaxException e) {
             LOG.error("Error while parsing received message");
@@ -102,6 +106,32 @@ public class Consumer {
     private void storeDeliveryIssue(Message msg) {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("delivery_issue").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("issue_type", linkedTreeMap.get("issue_type").toString())
+                .build();
+        saveToInfluxDB(p);
+    }
+
+    /**
+     * Stores a new route creation event in the Influx Database.
+     *
+     * @param msg The kafka message associated with this delivery.
+     */
+    private void storeRouteCreated(Message msg) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
+        Point p = Point.measurement("route_created").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("issue_type", linkedTreeMap.get("issue_type").toString())
+                .build();
+        saveToInfluxDB(p);
+    }
+
+    /**
+     * Stores a new route creation event in the Influx Database.
+     *
+     * @param msg The kafka message associated with this delivery.
+     */
+    private void storeRouteCanceled(Message msg) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
+        Point p = Point.measurement("route_canceled").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("issue_type", linkedTreeMap.get("issue_type").toString())
                 .build();
         saveToInfluxDB(p);
