@@ -150,7 +150,7 @@ def post_delivery_route(request):
         action='DELIVERY_INITIATED',
         message={
             'delivery_uuid': str(uuid.uuid4()),
-            'city': cities[region][randint(0, len(cities)-1)],
+            'city': cities[region][randint(0, len(cities[region])-1)],
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
         }
     )
@@ -177,7 +177,7 @@ def post_delivery_checkpoint_route(request):
         action='DELIVERY_CHECKPOINT',
         message={
             'delivery_id': randint(1, 9999),
-            'city': cities[region][randint(0, len(cities)-1)],
+            'city': cities[region][randint(0, len(cities[region])-1)],
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
             'isFinalDestination': is_final_destination
         }
