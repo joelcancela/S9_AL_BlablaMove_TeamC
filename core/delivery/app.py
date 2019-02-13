@@ -46,11 +46,22 @@ t_stop_event = threading.Event()
 
 
 cities = {
-    0: 'Marseille',
-    1: 'Antibes',
-    2: 'Toulon',
-    3: 'Aix-en-provence',
-    4: 'Nice'
+    'world': {
+        0: 'Nice'
+    },
+    'europe-west1-b': {
+        0: 'Marseille',
+        1: 'Antibes',
+        2: 'Toulon',
+        3: 'Aix-en-provence',
+        4: 'Nice'
+    },
+    'europe-west2-c': {
+        0: 'London',
+        1: 'Bristol',
+        2: 'Manchester',
+        3: 'Liverpool'
+    }
 }
 
 
@@ -139,7 +150,7 @@ def post_delivery_route(request):
         action='DELIVERY_INITIATED',
         message={
             'delivery_uuid': str(uuid.uuid4()),
-            'city': cities[randint(0, len(cities)-1)],
+            'city': cities[region][randint(0, len(cities)-1)],
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
         }
     )
@@ -166,7 +177,7 @@ def post_delivery_checkpoint_route(request):
         action='DELIVERY_CHECKPOINT',
         message={
             'delivery_id': randint(1, 9999),
-            'city': cities[randint(0, len(cities)-1)],
+            'city': cities[region][randint(0, len(cities)-1)],
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
             'isFinalDestination': is_final_destination
         }
@@ -190,7 +201,7 @@ def post_delivery_issue(request):
     message, request_id = make_kafka_message(
         action='DELIVERY_ISSUE',
         message={
-            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",         'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
         }
     )
