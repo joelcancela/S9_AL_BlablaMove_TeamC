@@ -72,3 +72,11 @@
 - Heartbeat (frontend) must be implemented
 - Google cloud deployment has been partially done
 - Region configuration into google cloud needs to be completed
+
+## Week 07: 11 February - 15 February 2019
+
+- Status flag: Green
+- Heartbeat supports any kind of service and region
+- 75% new marketing features implementation on backend
+- WIP for the deployment multi-regions
+- Preparing front-end for the remaining marketing KPIs
