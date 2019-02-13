@@ -74,10 +74,12 @@ public class Consumer {
         heartbeat_reply.setRequest((Double)linkedTreeMap.get("request"));
         heartbeat_reply.setTimestamp((Double)linkedTreeMap.get("timestamp"));
         heartbeat_reply.setService_name((String)linkedTreeMap.get("service_name"));
+        heartbeat_reply.setRegion((String) linkedTreeMap.get("region"));
         LOG.info("RECEIVED : " + heartbeat_reply.toString());
         Point p = Point.measurement("heartbeat")
                         .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                         .addField("service_name", heartbeat_reply.getService_name())
+                        .addField("region", heartbeat_reply.getRegion())
                         .build();
         saveToInfluxDB(p);
     }
