@@ -16,6 +16,8 @@ export class InfrastructureCheckerComponent implements OnInit {
   uk_core_delivery_running = RunningStatus.Unknown;
   uk_core_KPI_running = RunningStatus.Unknown;
   uk_core_user_running = RunningStatus.Unknown;
+  uk_indicator = "europe-west2-c";
+  fr_indicator = "europe-west1-b";
   seconds_to_update = 10;
 
   constructor(private heartBeatService: HeartbeatService) {
@@ -48,40 +50,94 @@ export class InfrastructureCheckerComponent implements OnInit {
         this.backend_running = RunningStatus.Running;
         arrayResult.forEach(function (element) {
           if (element.service_name === 'Core Delivery') {
-            // TODO: region
             const time = Date.parse(element.time);
             const diffSecs = Math.round(Date.now() - time) / 1000;
-            console.log(diffSecs);
             if (diffSecs > 10) {
-              this_.fr_core_delivery_running = RunningStatus.Stopped;
-              this_.uk_core_delivery_running = RunningStatus.Stopped;
+              if (element.region != undefined) {
+                if (element.region == this.fr_indicator) {
+                  this_.fr_core_delivery_running = RunningStatus.Stopped;
+
+                } else if (element.region == this.uk_indicator) {
+                  this_.uk_core_delivery_running = RunningStatus.Stopped;
+
+                } else {
+                  this_.fr_core_delivery_running = RunningStatus.Stopped;
+                  this_.uk_core_delivery_running = RunningStatus.Stopped;
+                }
+              }
             } else {
-              this_.fr_core_delivery_running = RunningStatus.Running;
-              this_.uk_core_delivery_running = RunningStatus.Running;
+              if (element.region != undefined) {
+                if (element.region == this.fr_indicator) {
+                  this_.fr_core_delivery_running = RunningStatus.Running;
+
+                } else if (element.region == this.uk_indicator) {
+                  this_.uk_core_delivery_running = RunningStatus.Running;
+
+                } else {
+                  this_.fr_core_delivery_running = RunningStatus.Running;
+                  this_.uk_core_delivery_running = RunningStatus.Running;
+                }
+              }
             }
           } else if (element.service_name === 'Core User') {
-            // TODO: region
             const time = Date.parse(element.time);
             const diffSecs = Math.round(Date.now() - time) / 1000;
-            console.log(diffSecs);
             if (diffSecs > 10) {
-              this_.fr_core_user_running = RunningStatus.Stopped;
-              this_.uk_core_user_running = RunningStatus.Stopped;
+              if (element.region != undefined) {
+                if (element.region == this.fr_indicator) {
+                  this_.fr_core_user_running = RunningStatus.Stopped;
+
+                } else if (element.region == this.uk_indicator) {
+                  this_.uk_core_user_running = RunningStatus.Stopped;
+
+                } else {
+                  this_.fr_core_user_running = RunningStatus.Stopped;
+                  this_.uk_core_user_running = RunningStatus.Stopped;
+                }
+              }
             } else {
-              this_.fr_core_user_running = RunningStatus.Running;
-              this_.uk_core_user_running = RunningStatus.Running;
+              if (element.region != undefined) {
+                if (element.region == this.fr_indicator) {
+                  this_.fr_core_user_running = RunningStatus.Running;
+
+                } else if (element.region == this.uk_indicator) {
+                  this_.uk_core_user_running = RunningStatus.Running;
+
+                } else {
+                  this_.fr_core_user_running = RunningStatus.Running;
+                  this_.uk_core_user_running = RunningStatus.Running;
+                }
+              }
             }
           } else if (element.service_name === 'Core KPI') {
-            // TODO: region
             const time = Date.parse(element.time);
             const diffSecs = Math.round(Date.now() - time) / 1000;
-            console.log(diffSecs);
             if (diffSecs > 10) {
-              this_.fr_core_KPI_running = RunningStatus.Stopped;
-              this_.uk_core_KPI_running = RunningStatus.Stopped;
+              if (element.region != undefined) {
+                if (element.region == this.fr_indicator) {
+                  this_.fr_core_KPI_running = RunningStatus.Stopped;
+
+                } else if (element.region == this.uk_indicator) {
+                  this_.uk_core_KPI_running = RunningStatus.Stopped;
+
+                } else {
+                  this_.fr_core_KPI_running = RunningStatus.Stopped;
+                  this_.uk_core_KPI_running = RunningStatus.Stopped;
+                }
+              }
             } else {
-              this_.fr_core_KPI_running = RunningStatus.Running;
-              this_.uk_core_KPI_running = RunningStatus.Running;
+              if (element.region != undefined) {
+                if (element.region == this.fr_indicator) {
+                  this_.fr_core_KPI_running = RunningStatus.Running;
+
+                } else if (element.region == this.uk_indicator) {
+                  this_.uk_core_KPI_running = RunningStatus.Running;
+
+                } else {
+                  this_.fr_core_KPI_running = RunningStatus.Running;
+                  this_.uk_core_KPI_running = RunningStatus.Running;
+                }
+              }
             }
           }
         });
