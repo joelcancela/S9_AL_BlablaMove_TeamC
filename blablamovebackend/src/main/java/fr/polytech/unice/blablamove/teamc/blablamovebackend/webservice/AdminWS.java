@@ -26,8 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin")
 public class AdminWS {
-	//TODO: nassim: heartbeat
-	//si y'a le time un objet Transaction qui regroupe delivery et route events
 	public AdminWS() {
 	}
 
@@ -75,7 +73,6 @@ public class AdminWS {
 		Query queryObject_services = new Query("Select distinct(service_name) as service_name from heartbeat", "blablamove");
 		QueryResult queryResult_services = BlablamovebackendApplication.influxDB.query(queryObject_services);
 
-		List<Heartbeat> heartbeats_service = resultMapper.toPOJO(queryResult_services, Heartbeat.class);
 		List<QueryResult.Result> results_services_names = queryResult_services.getResults();
 		for (QueryResult.Result r : results_services_names) {
 			for (QueryResult.Series s: r.getSeries()) {
