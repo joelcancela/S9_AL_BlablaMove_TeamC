@@ -17,28 +17,24 @@ export const MENU_ITEMS: NbMenuItem[] = [
     icon: 'fa fa-eur',
     children: [
       {
-        title: 'Stats',
-        link: '/pages/stats',
-      },
-      {
         title: 'Most active cities',
-        link: '/pages/marketing',
+        link: '/pages/marketing-most-active-cities',
       },
       {
-        title: 'User connections',
-        link: '/pages/user-stats',
+        title: 'Last 24h created routes',
+        link: '/pages/marketing-created-routes',
       },
       {
-        title: 'Items moved',
-        link: '/pages/items-stats',
+        title: 'Last 24h canceled routes',
+        link: '/pages/marketing-canceled-routes',
       },
       {
-        title: 'Routes stats',
-        link: '/pages/routes-stats',
+        title: 'Last 24h delivered items',
+        link: '/pages/marketing-delivered-items',
       },
       {
-        title: 'Issues stats',
-        link: '/pages/issues-stats',
+        title: 'Last 24h delivery issues',
+        link: '/pages/marketing-delivery-issues',
       },
     ],
   },

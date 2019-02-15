@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,8 +26,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin")
 public class AdminWS {
-	//TODO: nassim: heartbeat
-	//si y'a le time un objet Transaction qui regroupe delivery et route events
 	public AdminWS() {
 	}
 
@@ -62,22 +61,70 @@ public class AdminWS {
 			// connection to influxdb is not ready
 			return new ArrayList<>();
 		}
-		Query queryObject_delivery = new Query("Select * from heartbeat where service_name = 'Core Delivery' order by desc limit 1", "blablamove");
-		Query queryObject_kpi = new Query("Select * from heartbeat where service_name = 'Core KPI' order by desc limit 1", "blablamove");
-		Query queryObject_user = new Query("Select * from heartbeat where service_name = 'Core User' order by desc limit 1", "blablamove");
-		QueryResult queryResult_delivery = BlablamovebackendApplication.influxDB.query(queryObject_delivery);
-		QueryResult queryResult_kpi = BlablamovebackendApplication.influxDB.query(queryObject_kpi);
-		QueryResult queryResult_user = BlablamovebackendApplication.influxDB.query(queryObject_user);
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+
+		List<String> services_names = new ArrayList<>();
+		HashMap<String, List<String>> services_regions = new HashMap<>();
+		/*
+		 *
+		 * COLLECT ALL EXISTING SERVICES
+		 *
+		 */
+		Query queryObject_services = new Query("Select distinct(service_name) as service_name from heartbeat", "blablamove");
+		QueryResult queryResult_services = BlablamovebackendApplication.influxDB.query(queryObject_services);
+
+		List<QueryResult.Result> results_services_names = queryResult_services.getResults();
+		for (QueryResult.Result r : results_services_names) {
+			for (QueryResult.Series s: r.getSeries()) {
+				if(s.getColumns().contains("service_name")) {
+					List<List<Object>> values = s.getValues();
+					for (List<Object> o : values) {
+						String service = o.get(s.getColumns().indexOf("service_name")).toString();
+						services_names.add(service);
+						services_regions.put(service, new ArrayList<>());
+					}
+				}
+
+			}
+		}
+
+		/*
+		 *
+		 * COLLECT ALL EXISTING REGIONS PER SERVICES
+		 *
+		 */
+		for (String service : services_names) {
+			Query queryObject_regions = new Query("Select distinct(region) as region from heartbeat where service_name = '" + service + "'", "blablamove");
+			QueryResult queryResult_regions = BlablamovebackendApplication.influxDB.query(queryObject_regions);
+			for (QueryResult.Result r : queryResult_regions.getResults()) {
+				for (QueryResult.Series s: r.getSeries()) {
+					if(s.getColumns().contains("region")) {
+						List<List<Object>> values = s.getValues();
+						for (List<Object> o : values) {
+							String region = o.get(s.getColumns().indexOf("region")).toString();
+							services_regions.get(service).add(region);
+						}
+					}
+
+				}
+			}
+		}
+
+		/*
+		 *
+		 * COLLECT LAST HEARBEAT FOR EACH REGION OF EACH SERVICE
+		 *
+		 */
 		List<Heartbeat> heartbeat_replies = new ArrayList<>();
-		List<Heartbeat> heartbeat_delivery = resultMapper.toPOJO(queryResult_delivery, Heartbeat.class);
-		List<Heartbeat> heartbeat_kpi = resultMapper.toPOJO(queryResult_kpi, Heartbeat.class);
-		List<Heartbeat> heartbeat_user = resultMapper.toPOJO(queryResult_user, Heartbeat.class);
-		heartbeat_replies.addAll(heartbeat_delivery);
-		heartbeat_replies.addAll(heartbeat_kpi);
-		heartbeat_replies.addAll(heartbeat_user);
-		System.out.println("Object : ");
-		heartbeat_replies.stream().forEach(System.out::println);
+		for (String s : services_regions.keySet()) {
+			for (String r : services_regions.get(s)) {
+				Query queryObject_service = new Query("Select * from heartbeat where service_name = '" + s + "' and region = '" + r + "' order by desc limit 1", "blablamove");
+				QueryResult queryResult_service = BlablamovebackendApplication.influxDB.query(queryObject_service);
+				List<Heartbeat> heartbeats = resultMapper.toPOJO(queryResult_service, Heartbeat.class);
+				heartbeat_replies.addAll(heartbeats);
+			}
+		}
+
 		return heartbeat_replies;
 	}
 

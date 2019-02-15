@@ -3,8 +3,10 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.*;
-import kafka.consumer.HEARTBEAT_REPLY;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -26,7 +28,7 @@ public class MarketingWS {
 	private List<City> cities = new ArrayList<>();
 	private List<CityReport> citiesReports = new ArrayList<>();
 
-	// TODO: get data from DB
+	//TODO: joel:get cities from db
 	public MarketingWS() {
 		City marseille = new City("Marseille");
 		City antibes = new City("Antibes");
@@ -42,7 +44,6 @@ public class MarketingWS {
 
 	@RequestMapping(path = "/cities", method = RequestMethod.GET)
 	public List<City> getAllActiveCities() {
-		//TODO: joel will do
 		return cities;
 	}
 
