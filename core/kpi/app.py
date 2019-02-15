@@ -79,7 +79,7 @@ def __load_config():
            branch=True)
 def root_route(request):
     # API DOCUMENTATION ROOT
-    return File('./swagger')
+    return File('./swagger/index.html')
 
 
 # Health check
