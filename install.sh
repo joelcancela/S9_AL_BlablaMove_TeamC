@@ -11,6 +11,7 @@ docker build -t blablamove/fe-client-ui .
 cd ..
 
 cd ./blablamovebackend
+chmod +x build.sh
 ./build.sh
 cd ..
 

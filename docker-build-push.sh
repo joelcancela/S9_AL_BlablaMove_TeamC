@@ -13,6 +13,7 @@ docker push blablamove/fe-client-ui:latest
 cd ..
 
 cd ./blablamovebackend
-docker build -t blablamove/be-dashboard-service .
+chmod +x build.sh
+./build.sh
 docker push blablamove/be-dashboard-service:latest
 cd ..
