@@ -104,7 +104,6 @@ public class MarketingWSTest {
                 .build();
         BlablamovebackendApplication.influxDB.write(p);
     }
-
     @Ignore
     @Test
     public void marketingWSTest() {
