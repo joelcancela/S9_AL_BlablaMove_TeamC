@@ -45,6 +45,7 @@ threads_mq = {}
 t_stop_event = threading.Event()
 # Routes and deliveries state
 routes = {}
+deliveries = {}
 
 cities = {
     'world': {
@@ -183,11 +184,13 @@ def post_delivery_route(request):
     # Build message
     if len(created_routes) > 0 :
         to_init = choice(list(created_routes))
+        delivery_id = str(uuid.uuid4())
         routes[to_init] = "initiated"
+        deliveries[to_init] = delivery_id
         message, request_id = make_kafka_message(
             action='DELIVERY_INITIATED',
             message={
-                'delivery_uuid': str(uuid.uuid4()),
+                'delivery_uuid': delivery_id,
                 'city': cities[region][randint(0, len(cities[region])-1)],
                 'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
                 'route_uuid': to_init,
@@ -237,21 +240,27 @@ def post_delivery_issue(request):
     Notify that a specific delivery has had an issue.
     :return:
     """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='DELIVERY_ISSUE',
-        message={
-            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
-        }
-    )
 
-    # Send
-    threads_mq['delivery'].put(message)
-
-    # Response with callback url
-    return json.dumps(dict(message),)
-
+    initiated_routes = {k:v for k,v in routes.items() if  v == "initiated"}
+    if len(initiated_routes) > 0 :
+        issue_encountered = choice(list(initiated_routes))
+        routes[issue_encountered] = "has_issue"
+        # Build message
+        message, request_id = make_kafka_message(
+            action='DELIVERY_ISSUE',
+            message={
+                'delivery_uuid': deliveries[issue_encountered],
+                'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",
+                'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+            }
+        )
+    
+        # Send
+        threads_mq['delivery'].put(message)
+    
+        # Response with callback url
+        return json.dumps(dict(message),)
+    return "oupsy"
 
 ########################################################################################################################
 # END: ROUTES
