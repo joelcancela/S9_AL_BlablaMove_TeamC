@@ -9,7 +9,7 @@ import signal
 import sys
 import threading
 import uuid
-from random import randint
+from random import randint, choice
 
 from klein import Klein
 from time import sleep
@@ -43,7 +43,8 @@ threads = []
 threads_mq = {}
 # CLEAN EXIT EVENT
 t_stop_event = threading.Event()
-
+# Routes and deliveries state
+routes = {}
 
 cities = {
     'world': {
@@ -122,11 +123,12 @@ def post_route(request):
     Create a new route
     :return:
     """
+    uuid_route=str(uuid.uuid4())
     # Build message
     message, request_id = make_kafka_message(
         action='ROUTE_CREATED',
         message={
-            'route_uuid': str(uuid.uuid4()),
+            'route_uuid': uuid_route,
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
             'initial_city': cities[region][randint(0, len(cities[region])-1)],
             'end_city': cities[region][randint(0, len(cities[region])-1)]
@@ -135,7 +137,10 @@ def post_route(request):
 
     # Send
     threads_mq['route'].put(message)
-
+    print("route created")
+	# Store the route
+    routes[uuid_route] = "created"
+    print("Length : " + str(len(routes)))
     # Response with callback url
     return json.dumps(dict(message),)
 
@@ -147,21 +152,25 @@ def post_route_cancellation(request):
     Cancel a route
     :return:
     """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='ROUTE_CANCELED',
-        message={
-            'route_uuid': str(uuid.uuid4()),
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
-        }
-    )
+    created_routes = {k:v for k,v in routes.items() if  v == "created"}
+    if len(created_routes) > 0 :
+        to_cancel = choice(list(created_routes))
+        routes.pop(to_cancel)
+        # Build message
+        message, request_id = make_kafka_message(
+           action='ROUTE_CANCELED',
+           message={
+               'route_uuid': to_cancel,
+               'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+           }
+        )
 
-    # Send
-    threads_mq['route'].put(message)
+        # Send
+        threads_mq['route'].put(message)
 
-    # Response with callback url
-    return json.dumps(dict(message),)
-
+        # Response with callback url
+        return json.dumps(dict(message),)
+    return "oupsy"
 
 @app.route("/delivery",
            methods=['POST'])
