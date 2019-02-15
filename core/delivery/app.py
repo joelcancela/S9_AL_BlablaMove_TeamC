@@ -138,6 +138,29 @@ def post_route(request):
     return json.dumps(dict(message),)
 
 
+@app.route("/delivery/route",
+           methods=['DELETE'])
+def post_route_cancellation(request):
+    """
+    Cancel a route
+    :return:
+    """
+    # Build message
+    message, request_id = make_kafka_message(
+        action='ROUTE_CANCELED',
+        message={
+            'route_uuid': str(uuid.uuid4()),
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+        }
+    )
+
+    # Send
+    threads_mq['route'].put(message)
+
+    # Response with callback url
+    return json.dumps(dict(message),)
+
+
 @app.route("/delivery",
            methods=['POST'])
 def post_delivery_route(request):
