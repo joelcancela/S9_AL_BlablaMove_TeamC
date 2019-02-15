@@ -1,7 +1,7 @@
 <nb-card>
   <nb-card-header>Last 24h created routes</nb-card-header>
   <nb-card-body>
-    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+    <table id="table" class="table table-hover" cellspacing="0">
       <thead>
       <tr>
         <th>ID</th>
@@ -15,7 +15,7 @@
         <td>{{ route.route_uuid }}</td>
         <td>{{ route.initialCity }}</td>
         <td>{{ route.endCity }}</td>
-        <td>{{ route.time }}</td>
+        <td>{{ route.time.toISOString() }}</td>
       </tr>
       </tbody>
     </table>
