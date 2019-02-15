@@ -40,11 +40,28 @@ public class Consumer {
                 storeRouteCreated(msg);
             } else if (msg.getAction().equals("ROUTE_CANCELED")) {
                 storeRouteCanceled(msg);
+            } else if (msg.getAction().equals("DELIVERY_ITEM")) {
+            storeDeliveryItem(msg);
             }
         } catch (JsonSyntaxException e) {
             LOG.error("Error while parsing received message");
         }
         latchDelivery.countDown();
+    }
+
+    /**
+     * Stores a new delivery item in the Influx Database.
+     *
+     * @param msg The kafka message associated with this delivery item.
+     */
+    private void storeDeliveryItem(Message msg) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
+        Point p = Point.measurement("delivery_item").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("item_type", linkedTreeMap.get("item_type").toString())
+                .addField("delivery_uuid", linkedTreeMap.get("delivery_uuid").toString())
+                .addField("time", linkedTreeMap.get("time").toString())
+                .build();
+        saveToInfluxDB(p);
     }
 
     /**

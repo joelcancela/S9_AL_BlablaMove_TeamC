@@ -63,6 +63,8 @@ cities = {
         3: 'Liverpool'
     }
 }
+items = ["guitar", "bread", "CD", "mop", "thermostat", "clothes", "fake flowers", "towel", "lamp", "watch", "nail file", "sandal", "lace", "coasters",
+         "paper", "soda can", "paint brush", "photo album", "desk", "newspaper", "hair tie", "button", "tissue box", "spring", "shampoo", "air freshener", "magnet"]
 
 
 def __sigint_handler(sig, frame):
@@ -83,7 +85,8 @@ def __load_config():
     """
     Parse database configuration file
     """
-    config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.ini")
+    config_file = os.path.join(os.path.dirname(
+        os.path.realpath(__file__)), "config.ini")
     if not os.path.exists(config_file):
         raise FileNotFoundError(config_file)
     app_config = configparser.ConfigParser()
@@ -239,6 +242,30 @@ def post_delivery_issue(request):
     return json.dumps(dict(message),)
 
 
+@app.route("/delivery/item",
+           methods=['POST'])
+def post_delivery_item(request):
+    """
+    Add an item to a delivery
+    :return:
+    """
+    # Build message
+    message, request_id = make_kafka_message(
+        action='DELIVERY_ITEM',
+        message={
+            'delivery_uuid': str(uuid.uuid4()),
+            'item_type': items[randint(0, len(items)-1)],
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+        }
+    )
+
+    # Send
+    threads_mq['delivery'].put(message)
+
+    # Response with callback url
+    return json.dumps(dict(message),)
+
+
 ########################################################################################################################
 # END: ROUTES
 ########################################################################################################################
@@ -265,7 +292,8 @@ if __name__ == '__main__':
 
     # Bootstrap servers
     if ',' in str(app_config['bootstrap_servers']):
-        bootstrap_servers = list(filter(None, str(app_config['bootstrap_servers']).split(',')))
+        bootstrap_servers = list(
+            filter(None, str(app_config['bootstrap_servers']).split(',')))
     else:
         bootstrap_servers.append(str(app_config['bootstrap_servers']))
 
@@ -296,7 +324,8 @@ if __name__ == '__main__':
         name='kafka_heartbeat_consumer_worker',
         daemon=True,
         target=kafka_consumer_worker,
-        args=(t_stop_event, bootstrap_servers, 'heartbeat', region, __product__, threads_mq)
+        args=(t_stop_event, bootstrap_servers,
+              'heartbeat', region, __product__, threads_mq)
     )
     threads.append(t_kafka_hb_consumer_worker)
 
@@ -306,7 +335,8 @@ if __name__ == '__main__':
     for t in threads:
         t.start()
 
-    print('[' + region + '] ' + __product__ + ' version ' + __version__ + ' (' + env + ') is listening "' + host + ':' + port + '"')
+    print('[' + region + '] ' + __product__ + ' version ' + __version__ +
+          ' (' + env + ') is listening "' + host + ':' + port + '"')
 
     # Http server
     # log = open('app.log', 'a')
