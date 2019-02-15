@@ -3,8 +3,10 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.*;
-import kafka.consumer.HEARTBEAT_REPLY;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -26,7 +28,7 @@ public class MarketingWS {
 	private List<City> cities = new ArrayList<>();
 	private List<CityReport> citiesReports = new ArrayList<>();
 
-	// TODO: get data from DB
+	//TODO: joel:get cities from db
 	public MarketingWS() {
 		City marseille = new City("Marseille");
 		City antibes = new City("Antibes");
@@ -42,7 +44,6 @@ public class MarketingWS {
 
 	@RequestMapping(path = "/cities", method = RequestMethod.GET)
 	public List<City> getAllActiveCities() {
-		//TODO: joel will do
 		return cities;
 	}
 
@@ -122,17 +123,17 @@ public class MarketingWS {
 	 * @return The routes created in the specific timeframe.
 	 */
 	@RequestMapping(path = "/specificCreatedRoutes", method = RequestMethod.GET)
-	public List<RouteCreated> GetRoutesCreatedByTimeframe(Date from, Date to) {
-		Query queryObject = new Query("Select * from created_routes", "blablamove");
+	public List<RouteCreated> getRoutesCreatedByTimeframe(Date from, Date to) {
+		Query queryObject = new Query("Select * from route_created", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		List<RouteCreated> deliveryIssueList = resultMapper
+		List<RouteCreated> routeCreatedList = resultMapper
 				.toPOJO(queryResult, RouteCreated.class);
 
-		return deliveryIssueList.stream().filter(
-				deliveryIssue -> !instantIsBetweenDates(
-						deliveryIssue.getTime(),
+		return routeCreatedList.stream().filter(
+				routeCreated -> !instantIsBetweenDates(
+						routeCreated.getTime(),
 						LocalDateTime.ofInstant(
 								to.toInstant(), ZoneOffset.UTC
 						),
@@ -150,17 +151,17 @@ public class MarketingWS {
 	 * @return The routes canceled in the specific timeframe.
 	 */
 	@RequestMapping(path = "/specificCanceledRoutes", method = RequestMethod.GET)
-	public List<RouteCanceled> GetRoutesCanceledByTimeframe(Date from, Date to) {
-		Query queryObject = new Query("Select * from canceled_routes", "blablamove");
+	public List<RouteCanceled> getRoutesCanceledByTimeframe(Date from, Date to) {
+		Query queryObject = new Query("Select * from route_canceled", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
 
 		InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
-		List<RouteCanceled> deliveryIssueList = resultMapper
+		List<RouteCanceled> routeCanceledList = resultMapper
 				.toPOJO(queryResult, RouteCanceled.class);
 
-		return deliveryIssueList.stream().filter(
-				deliveryIssue -> !instantIsBetweenDates(
-						deliveryIssue.getTime(),
+		return routeCanceledList.stream().filter(
+				routeCanceled -> !instantIsBetweenDates(
+						routeCanceled.getTime(),
 						LocalDateTime.ofInstant(
 								to.toInstant(), ZoneOffset.UTC
 						),

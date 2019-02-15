@@ -36,6 +36,10 @@ public class Consumer {
                 storeDeliveryInitiation(msg);
             } else if (msg.getAction().equals("DELIVERY_ISSUE")) {
                 storeDeliveryIssue(msg);
+            } else if (msg.getAction().equals("ROUTE_CREATED")) {
+                storeRouteCreated(msg);
+            } else if (msg.getAction().equals("ROUTE_CANCELED")) {
+                storeRouteCanceled(msg);
             }
         } catch (JsonSyntaxException e) {
             LOG.error("Error while parsing received message");
@@ -70,10 +74,12 @@ public class Consumer {
         heartbeat_reply.setRequest((Double)linkedTreeMap.get("request"));
         heartbeat_reply.setTimestamp((Double)linkedTreeMap.get("timestamp"));
         heartbeat_reply.setService_name((String)linkedTreeMap.get("service_name"));
+        heartbeat_reply.setRegion((String) linkedTreeMap.get("region"));
         LOG.info("RECEIVED : " + heartbeat_reply.toString());
         Point p = Point.measurement("heartbeat")
                         .time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                         .addField("service_name", heartbeat_reply.getService_name())
+                        .addField("region", heartbeat_reply.getRegion())
                         .build();
         saveToInfluxDB(p);
     }
@@ -90,6 +96,7 @@ public class Consumer {
                 .addField("city", linkedTreeMap.get("city").toString())
                 .addField("delivery_uuid", linkedTreeMap.get("delivery_uuid").toString())
                 .addField("time", linkedTreeMap.get("time").toString())
+                .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
                 .build();
         saveToInfluxDB(p);
     }
@@ -103,6 +110,34 @@ public class Consumer {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("delivery_issue").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("issue_type", linkedTreeMap.get("issue_type").toString())
+                .build();
+        saveToInfluxDB(p);
+    }
+
+    /**
+     * Stores a new route creation event in the Influx Database.
+     *
+     * @param msg The kafka message associated with this delivery.
+     */
+    private void storeRouteCreated(Message msg) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
+        Point p = Point.measurement("route_created").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
+                .addField("initial_city", linkedTreeMap.get("initial_city").toString())
+                .addField("end_city", linkedTreeMap.get("end_city").toString())
+                .build();
+        saveToInfluxDB(p);
+    }
+
+    /**
+     * Stores a new route creation event in the Influx Database.
+     *
+     * @param msg The kafka message associated with this delivery.
+     */
+    private void storeRouteCanceled(Message msg) {
+        LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
+        Point p = Point.measurement("route_canceled").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+                .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
                 .build();
         saveToInfluxDB(p);
     }

@@ -5,6 +5,7 @@ public class HEARTBEAT_REPLY {
     private String service_name;
     private Double timestamp;
     private Double request;
+    private String region;
 
     public String getService_name() {
         return service_name;
@@ -30,12 +31,21 @@ public class HEARTBEAT_REPLY {
         this.request = request;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
     @Override
     public String toString() {
         return "HEARTBEAT_REPLY{" +
                 "service_name='" + service_name + '\'' +
                 ", timestamp=" + timestamp +
                 ", request=" + request +
+                ", region='" + region + '\'' +
                 '}';
     }
 }
