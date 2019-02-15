@@ -6,7 +6,7 @@ ADD . .
 
 RUN apt-get update
 RUN apt-get install -y nginx && service nginx stop
-RUN mv -f ./nginx.conf /etc/nginx/nginx.conf && chown nginx /etc/nginx/nginx.conf && chgrp nginx /etc/nginx/nginx.conf
+RUN mv -f ./nginx.conf /etc/nginx/nginx.conf && chown www-data /etc/nginx/nginx.conf && www-data nginx /etc/nginx/nginx.conf
 RUN npm install -g @angular/cli
 RUN npm install
 #RUN ng build --prod --build-optimizer --base-href=/ui/ && service nginx start
