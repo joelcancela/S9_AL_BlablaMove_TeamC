@@ -20,6 +20,18 @@ public class RouteCreated {
     private String route_uuid;
 
     /**
+     * The city where the delivery started.
+     */
+    @Column(name = "initial_city")
+    private String initialCity;
+
+    /**
+     * The city where the delivery ended
+     */
+    @Column(name = "end_city")
+    private String endCity;
+
+    /**
      * The time at which the route has been created.
      */
     @Column(name = "time")

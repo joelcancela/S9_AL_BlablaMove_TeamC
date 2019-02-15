@@ -96,6 +96,7 @@ public class Consumer {
                 .addField("city", linkedTreeMap.get("city").toString())
                 .addField("delivery_uuid", linkedTreeMap.get("delivery_uuid").toString())
                 .addField("time", linkedTreeMap.get("time").toString())
+                .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
                 .build();
         saveToInfluxDB(p);
     }
@@ -122,6 +123,8 @@ public class Consumer {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("route_created").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
+                .addField("initial_city", linkedTreeMap.get("initial_city").toString())
+                .addField("end_city", linkedTreeMap.get("end_city").toString())
                 .build();
         saveToInfluxDB(p);
     }

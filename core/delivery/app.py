@@ -127,7 +127,9 @@ def post_route(request):
         action='ROUTE_CREATED',
         message={
             'route_uuid': str(uuid.uuid4()),
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+            'initial_city': cities[region][randint(0, len(cities[region])-1)],
+            'end_city': cities[region][randint(0, len(cities[region])-1)]
         }
     )
 
@@ -174,7 +176,8 @@ def post_delivery_route(request):
         message={
             'delivery_uuid': str(uuid.uuid4()),
             'city': cities[region][randint(0, len(cities[region])-1)],
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+            'route_uuid': str(uuid.uuid4()),
         }
     )
 
