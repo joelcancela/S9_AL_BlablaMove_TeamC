@@ -3,10 +3,7 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.City;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.CityReport;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryInitiated;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
-import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.*;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
@@ -72,7 +69,7 @@ public class MarketingWS {
 	 * Returns the delivery issues of the last 24 hours.
 	 * @return The delivery issues of the last 24 hours.
 	 */
-	@RequestMapping(path = "/deliveryIssues", method = RequestMethod.GET)
+	@RequestMapping(path = "/last24hDeliveryIssues", method = RequestMethod.GET)
 	public List<DeliveryIssue> getLast24hDeliveryIssues() {
 		Query queryObject = new Query("Select * from delivery_issue", "blablamove");
 		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
@@ -115,6 +112,26 @@ public class MarketingWS {
 				)
 		).collect(Collectors.toList());
 	}
+
+    /**
+     * Returns the created routes of the last 24 hours.
+     * @return The created routes of the last 24 hours.
+     */
+    @RequestMapping(path = "/last24hCreatedRoutes", method = RequestMethod.GET)
+    public List<RouteCreated> getLast24hCreatedRoutes() {
+        Query queryObject = new Query("Select * from route_created", "blablamove");
+        QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
+
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        System.out.println("queryResult : " + queryResult);
+        List<RouteCreated> routeCreatedList = resultMapper
+                .toPOJO(queryResult, RouteCreated.class);
+
+        LocalDateTime stop = LocalDateTime.now().minusHours(0);
+        LocalDateTime start = LocalDateTime.now().minusHours(24).withSecond(0).withMinute(0).withNano(0);
+
+        return routeCreatedList.stream().filter(routeCreated -> instantIsBetweenDates(routeCreated.getTime(), start, stop)).collect(Collectors.toList());
+    }
 
 	/**
 	 * Returns the routes created in a specific timeframe.
@@ -171,6 +188,46 @@ public class MarketingWS {
 				)
 		).collect(Collectors.toList());
 	}
+
+    /**
+     * Returns the canceled routes of the last 24 hours.
+     * @return The canceled routes of the last 24 hours.
+     */
+    @RequestMapping(path = "/last24hCanceledRoutes", method = RequestMethod.GET)
+    public List<RouteCanceled> getLast24hCanceledRoutes() {
+        Query queryObject = new Query("Select * from route_canceled", "blablamove");
+        QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
+
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        System.out.println("queryResult : " + queryResult);
+        List<RouteCanceled> routeCanceledList = resultMapper
+                .toPOJO(queryResult, RouteCanceled.class);
+
+        LocalDateTime stop = LocalDateTime.now().minusHours(0);
+        LocalDateTime start = LocalDateTime.now().minusHours(24).withSecond(0).withMinute(0).withNano(0);
+
+        return routeCanceledList.stream().filter(routeCanceled -> instantIsBetweenDates(routeCanceled.getTime(), start, stop)).collect(Collectors.toList());
+    }
+
+    /**
+     * Returns the delivered items of the last 24 hours.
+     * @return The delivered items of the last 24 hours.
+     */
+    @RequestMapping(path = "/last24hDeliveredItems", method = RequestMethod.GET)
+    public List<DeliveredItem> getLast24hDeliveredItems() {
+        Query queryObject = new Query("Select * from delivery_item", "blablamove");
+        QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
+
+        InfluxDBResultMapper resultMapper = new InfluxDBResultMapper();
+        System.out.println("queryResult : " + queryResult);
+        List<DeliveredItem> deliveredItemList = resultMapper
+                .toPOJO(queryResult, DeliveredItem.class);
+
+        LocalDateTime stop = LocalDateTime.now().minusHours(0);
+        LocalDateTime start = LocalDateTime.now().minusHours(24).withSecond(0).withMinute(0).withNano(0);
+
+        return deliveredItemList.stream().filter(deliveredItem -> instantIsBetweenDates(deliveredItem.getTime(), start, stop)).collect(Collectors.toList());
+    }
 
 	private boolean instantIsBetweenDates(Instant instant, LocalDateTime start, LocalDateTime stop) {
 		return (!instant.isBefore(start.toInstant(OffsetDateTime.now().getOffset()))) && (instant.isBefore(stop.toInstant(OffsetDateTime.now().getOffset())));

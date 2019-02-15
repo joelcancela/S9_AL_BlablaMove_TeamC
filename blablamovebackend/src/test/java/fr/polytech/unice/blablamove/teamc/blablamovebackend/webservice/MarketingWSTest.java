@@ -23,7 +23,7 @@ import static junit.framework.Assert.assertEquals;
  * This will wipe the database.
  */
 public class MarketingWSTest {
-
+    
     @Ignore
     @Before
     public void init() throws Exception {
@@ -104,7 +104,6 @@ public class MarketingWSTest {
                 .build();
         BlablamovebackendApplication.influxDB.write(p);
     }
-
     @Ignore
     @Test
     public void marketingWSTest() {
