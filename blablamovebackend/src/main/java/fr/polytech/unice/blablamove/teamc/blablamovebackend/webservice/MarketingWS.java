@@ -7,9 +7,12 @@ import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.Deliv
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
+import kafka.producer.Sender;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +27,8 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping(path = "/marketing")
 public class MarketingWS {
+
+	private static final Logger LOG = LoggerFactory.getLogger(MarketingWS.class);
 
 	private List<City> cities = new ArrayList<>();
 	private List<CityReport> citiesReports = new ArrayList<>();
@@ -44,6 +49,26 @@ public class MarketingWS {
 
 	@RequestMapping(path = "/cities", method = RequestMethod.GET)
 	public List<City> getAllActiveCities() {
+		List<City> cities = new ArrayList<>();
+		Query queryObject = new Query("Select distinct(city) as city from delivery_initiated", "blablamove");
+		QueryResult queryResult = BlablamovebackendApplication.influxDB.query(queryObject);
+		List<QueryResult.Result> results_cities = queryResult.getResults();
+		for (QueryResult.Result r : results_cities) {
+			try {
+				for (QueryResult.Series s : r.getSeries()) {
+					if (s.getColumns().contains("city")) {
+						List<List<Object>> values = s.getValues();
+						for (List<Object> o : values) {
+							String city = o.get(s.getColumns().indexOf("city")).toString();
+							cities.add(new City(city));
+						}
+					}
+
+				}
+			} catch (NullPointerException e) {
+				LOG.info("No city can be found into database, returning empty list");
+			}
+		}
 		return cities;
 	}
 
@@ -85,7 +110,7 @@ public class MarketingWS {
 		LocalDateTime stop = LocalDateTime.now().minusHours(0);
 		LocalDateTime start = LocalDateTime.now().minusHours(24).withSecond(0).withMinute(0).withNano(0);
 
-        return deliveryIssueList.stream().filter(deliveryIssue -> instantIsBetweenDates(deliveryIssue.getTime(), start, stop)).collect(Collectors.toList());
+		return deliveryIssueList.stream().filter(deliveryIssue -> instantIsBetweenDates(deliveryIssue.getTime(), start, stop)).collect(Collectors.toList());
 	}
 
 	/**
@@ -103,15 +128,15 @@ public class MarketingWS {
 		List<DeliveryIssue> deliveryIssueList = resultMapper
 				.toPOJO(queryResult, DeliveryIssue.class);
 
-        return deliveryIssueList.stream().filter(
-        		deliveryIssue -> !instantIsBetweenDates(
-        				deliveryIssue.getTime(),
+		return deliveryIssueList.stream().filter(
+				deliveryIssue -> !instantIsBetweenDates(
+						deliveryIssue.getTime(),
 						LocalDateTime.ofInstant(
-                                to.toInstant(), ZoneOffset.UTC
+								to.toInstant(), ZoneOffset.UTC
 						),
 						LocalDateTime.ofInstant(
-                                from.toInstant(), ZoneOffset.UTC
-                        )
+								from.toInstant(), ZoneOffset.UTC
+						)
 				)
 		).collect(Collectors.toList());
 	}

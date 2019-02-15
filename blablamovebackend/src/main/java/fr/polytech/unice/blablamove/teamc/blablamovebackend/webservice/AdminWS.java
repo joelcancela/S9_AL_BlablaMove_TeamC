@@ -7,6 +7,8 @@ import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.UserL
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 import org.influxdb.impl.InfluxDBResultMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +28,9 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin")
 public class AdminWS {
+
+	private static final Logger LOG = LoggerFactory.getLogger(AdminWS.class);
+
 	public AdminWS() {
 	}
 
@@ -74,18 +79,22 @@ public class AdminWS {
 		QueryResult queryResult_services = BlablamovebackendApplication.influxDB.query(queryObject_services);
 
 		List<QueryResult.Result> results_services_names = queryResult_services.getResults();
-		for (QueryResult.Result r : results_services_names) {
-			for (QueryResult.Series s: r.getSeries()) {
-				if(s.getColumns().contains("service_name")) {
-					List<List<Object>> values = s.getValues();
-					for (List<Object> o : values) {
-						String service = o.get(s.getColumns().indexOf("service_name")).toString();
-						services_names.add(service);
-						services_regions.put(service, new ArrayList<>());
+		try {
+			for (QueryResult.Result r : results_services_names) {
+				for (QueryResult.Series s : r.getSeries()) {
+					if (s.getColumns().contains("service_name")) {
+						List<List<Object>> values = s.getValues();
+						for (List<Object> o : values) {
+							String service = o.get(s.getColumns().indexOf("service_name")).toString();
+							services_names.add(service);
+							services_regions.put(service, new ArrayList<>());
+						}
 					}
-				}
 
+				}
 			}
+		} catch (NullPointerException e) {
+			LOG.info("No service names found");
 		}
 
 		/*
@@ -93,23 +102,24 @@ public class AdminWS {
 		 * COLLECT ALL EXISTING REGIONS PER SERVICES
 		 *
 		 */
-		for (String service : services_names) {
-			Query queryObject_regions = new Query("Select distinct(region) as region from heartbeat where service_name = '" + service + "'", "blablamove");
-			QueryResult queryResult_regions = BlablamovebackendApplication.influxDB.query(queryObject_regions);
-			for (QueryResult.Result r : queryResult_regions.getResults()) {
-				for (QueryResult.Series s: r.getSeries()) {
-					if(s.getColumns().contains("region")) {
-						List<List<Object>> values = s.getValues();
-						for (List<Object> o : values) {
-							String region = o.get(s.getColumns().indexOf("region")).toString();
-							services_regions.get(service).add(region);
+		if (services_names.size() > 0) {
+			for (String service : services_names) {
+				Query queryObject_regions = new Query("Select distinct(region) as region from heartbeat where service_name = '" + service + "'", "blablamove");
+				QueryResult queryResult_regions = BlablamovebackendApplication.influxDB.query(queryObject_regions);
+				for (QueryResult.Result r : queryResult_regions.getResults()) {
+					for (QueryResult.Series s : r.getSeries()) {
+						if (s.getColumns().contains("region")) {
+							List<List<Object>> values = s.getValues();
+							for (List<Object> o : values) {
+								String region = o.get(s.getColumns().indexOf("region")).toString();
+								services_regions.get(service).add(region);
+							}
 						}
-					}
 
+					}
 				}
 			}
 		}
-
 		/*
 		 *
 		 * COLLECT LAST HEARBEAT FOR EACH REGION OF EACH SERVICE
