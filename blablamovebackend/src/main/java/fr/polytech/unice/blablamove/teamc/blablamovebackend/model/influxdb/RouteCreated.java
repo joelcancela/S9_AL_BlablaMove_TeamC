@@ -40,4 +40,32 @@ public class RouteCreated {
     public Instant getTime() {
         return time;
     }
+
+    public String getRoute_uuid() {
+        return route_uuid;
+    }
+
+    public void setRoute_uuid(String route_uuid) {
+        this.route_uuid = route_uuid;
+    }
+
+    public String getInitialCity() {
+        return initialCity;
+    }
+
+    public void setInitialCity(String initialCity) {
+        this.initialCity = initialCity;
+    }
+
+    public String getEndCity() {
+        return endCity;
+    }
+
+    public void setEndCity(String endCity) {
+        this.endCity = endCity;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
+    }
 }
