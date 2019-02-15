@@ -138,8 +138,8 @@ def post_route(request):
     return json.dumps(dict(message),)
 
 
-@app.route("/delivery/routeCancellation",
-           methods=['POST'])
+@app.route("/delivery/route",
+           methods=['DELETE'])
 def post_route_cancellation(request):
     """
     Cancel a route
