@@ -34,4 +34,24 @@ public class DeliveryIssue {
     public Instant getTime() {
         return time;
     }
+
+    public String getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(String issueType) {
+        this.issueType = issueType;
+    }
+
+    public String getDelivery_uuid() {
+        return delivery_uuid;
+    }
+
+    public void setDelivery_uuid(String delivery_uuid) {
+        this.delivery_uuid = delivery_uuid;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
+    }
 }
