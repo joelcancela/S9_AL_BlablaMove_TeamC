@@ -28,4 +28,16 @@ public class RouteCanceled {
     public Instant getTime() {
         return time;
     }
+
+    public String getRoute_uuid() {
+        return route_uuid;
+    }
+
+    public void setRoute_uuid(String route_uuid) {
+        this.route_uuid = route_uuid;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
+    }
 }
