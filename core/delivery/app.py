@@ -9,7 +9,7 @@ import signal
 import sys
 import threading
 import uuid
-from random import randint
+from random import randint, choice
 
 from klein import Klein
 from time import sleep
@@ -43,7 +43,9 @@ threads = []
 threads_mq = {}
 # CLEAN EXIT EVENT
 t_stop_event = threading.Event()
-
+# Routes and deliveries state
+routes = {}
+deliveries = {}
 
 cities = {
     'world': {
@@ -63,8 +65,6 @@ cities = {
         3: 'Liverpool'
     }
 }
-items = ["guitar", "bread", "CD", "mop", "thermostat", "clothes", "fake flowers", "towel", "lamp", "watch", "nail file", "sandal", "lace", "coasters",
-         "paper", "soda can", "paint brush", "photo album", "desk", "newspaper", "hair tie", "button", "tissue box", "spring", "shampoo", "air freshener", "magnet"]
 
 
 def __sigint_handler(sig, frame):
@@ -85,8 +85,7 @@ def __load_config():
     """
     Parse database configuration file
     """
-    config_file = os.path.join(os.path.dirname(
-        os.path.realpath(__file__)), "config.ini")
+    config_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), "config.ini")
     if not os.path.exists(config_file):
         raise FileNotFoundError(config_file)
     app_config = configparser.ConfigParser()
@@ -125,11 +124,12 @@ def post_route(request):
     Create a new route
     :return:
     """
+    uuid_route=str(uuid.uuid4())
     # Build message
     message, request_id = make_kafka_message(
         action='ROUTE_CREATED',
         message={
-            'route_uuid': str(uuid.uuid4()),
+            'route_uuid': uuid_route,
             'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
             'initial_city': cities[region][randint(0, len(cities[region])-1)],
             'end_city': cities[region][randint(0, len(cities[region])-1)]
@@ -138,7 +138,10 @@ def post_route(request):
 
     # Send
     threads_mq['route'].put(message)
-
+    print("route created")
+	# Store the route
+    routes[uuid_route] = "created"
+    print("Length : " + str(len(routes)))
     # Response with callback url
     return json.dumps(dict(message),)
 
@@ -150,21 +153,25 @@ def post_route_cancellation(request):
     Cancel a route
     :return:
     """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='ROUTE_CANCELED',
-        message={
-            'route_uuid': str(uuid.uuid4()),
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
-        }
-    )
+    created_routes = {k:v for k,v in routes.items() if  v == "created"}
+    if len(created_routes) > 0 :
+        to_cancel = choice(list(created_routes))
+        routes.pop(to_cancel)
+        # Build message
+        message, request_id = make_kafka_message(
+           action='ROUTE_CANCELED',
+           message={
+               'route_uuid': to_cancel,
+               'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+           }
+        )
 
-    # Send
-    threads_mq['route'].put(message)
+        # Send
+        threads_mq['route'].put(message)
 
-    # Response with callback url
-    return json.dumps(dict(message),)
-
+        # Response with callback url
+        return json.dumps(dict(message),)
+    return "oupsy"
 
 @app.route("/delivery",
            methods=['POST'])
@@ -173,22 +180,29 @@ def post_delivery_route(request):
     Create a new delivery
     :return:
     """
+    created_routes = {k:v for k,v in routes.items() if  v == "created"}
     # Build message
-    message, request_id = make_kafka_message(
-        action='DELIVERY_INITIATED',
-        message={
-            'delivery_uuid': str(uuid.uuid4()),
-            'city': cities[region][randint(0, len(cities[region])-1)],
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
-            'route_uuid': str(uuid.uuid4()),
-        }
-    )
+    if len(created_routes) > 0 :
+        to_init = choice(list(created_routes))
+        delivery_id = str(uuid.uuid4())
+        routes[to_init] = "initiated"
+        deliveries[to_init] = delivery_id
+        message, request_id = make_kafka_message(
+            action='DELIVERY_INITIATED',
+            message={
+                'delivery_uuid': delivery_id,
+                'city': cities[region][randint(0, len(cities[region])-1)],
+                'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+                'route_uuid': to_init,
+            }
+        )
 
-    # Send
-    threads_mq['delivery'].put(message)
+        # Send
+        threads_mq['delivery'].put(message)
 
-    # Response with callback url
-    return json.dumps(dict(message),)
+        # Response with callback url
+        return json.dumps(dict(message),)
+    return "oupsy"
 
 
 @app.route("/delivery/checkpoint",
@@ -226,45 +240,27 @@ def post_delivery_issue(request):
     Notify that a specific delivery has had an issue.
     :return:
     """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='DELIVERY_ISSUE',
-        message={
-            'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
-        }
-    )
 
-    # Send
-    threads_mq['delivery'].put(message)
-
-    # Response with callback url
-    return json.dumps(dict(message),)
-
-
-@app.route("/delivery/item",
-           methods=['POST'])
-def post_delivery_item(request):
-    """
-    Add an item to a delivery
-    :return:
-    """
-    # Build message
-    message, request_id = make_kafka_message(
-        action='DELIVERY_ITEM',
-        message={
-            'delivery_uuid': str(uuid.uuid4()),
-            'item_type': items[randint(0, len(items)-1)],
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
-        }
-    )
-
-    # Send
-    threads_mq['delivery'].put(message)
-
-    # Response with callback url
-    return json.dumps(dict(message),)
-
+    initiated_routes = {k:v for k,v in routes.items() if  v == "initiated"}
+    if len(initiated_routes) > 0 :
+        issue_encountered = choice(list(initiated_routes))
+        routes[issue_encountered] = "has_issue"
+        # Build message
+        message, request_id = make_kafka_message(
+            action='DELIVERY_ISSUE',
+            message={
+                'delivery_uuid': deliveries[issue_encountered],
+                'issue_type': "DELIVERY_MISSING" if randint(1, 2) > 1 else "DAMAGED_DELIVERY",
+                'time': str(datetime.datetime.now().replace(microsecond=0).isoformat())
+            }
+        )
+    
+        # Send
+        threads_mq['delivery'].put(message)
+    
+        # Response with callback url
+        return json.dumps(dict(message),)
+    return "oupsy"
 
 ########################################################################################################################
 # END: ROUTES
@@ -292,8 +288,7 @@ if __name__ == '__main__':
 
     # Bootstrap servers
     if ',' in str(app_config['bootstrap_servers']):
-        bootstrap_servers = list(
-            filter(None, str(app_config['bootstrap_servers']).split(',')))
+        bootstrap_servers = list(filter(None, str(app_config['bootstrap_servers']).split(',')))
     else:
         bootstrap_servers.append(str(app_config['bootstrap_servers']))
 
@@ -324,8 +319,7 @@ if __name__ == '__main__':
         name='kafka_heartbeat_consumer_worker',
         daemon=True,
         target=kafka_consumer_worker,
-        args=(t_stop_event, bootstrap_servers,
-              'heartbeat', region, __product__, threads_mq)
+        args=(t_stop_event, bootstrap_servers, 'heartbeat', region, __product__, threads_mq)
     )
     threads.append(t_kafka_hb_consumer_worker)
 
@@ -335,8 +329,7 @@ if __name__ == '__main__':
     for t in threads:
         t.start()
 
-    print('[' + region + '] ' + __product__ + ' version ' + __version__ +
-          ' (' + env + ') is listening "' + host + ':' + port + '"')
+    print('[' + region + '] ' + __product__ + ' version ' + __version__ + ' (' + env + ') is listening "' + host + ':' + port + '"')
 
     # Http server
     # log = open('app.log', 'a')
