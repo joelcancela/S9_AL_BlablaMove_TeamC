@@ -16,7 +16,7 @@ services:
     container_name: fe_client_ui
     image: "blablamove/fe-client-ui"
     ports:
-      - "4202:4200"
+      - "4202:80"
     restart: always
 
   # Backend
