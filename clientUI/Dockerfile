@@ -22,4 +22,7 @@ RUN npm install
 
 RUN ng build
 
+# flush black hole
+RUN rm -rf ./node_modules
+
 CMD /usr/sbin/nginx
