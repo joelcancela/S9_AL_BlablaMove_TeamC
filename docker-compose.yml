@@ -3,6 +3,7 @@ version: "2.1"
 
 services:
   # Frontend
+  # /marketingui/
   adminMarketingUI:
     container_name: fe_admin_marketing_ui
     image: "blablamove/fe-admin-marketing-ui"
@@ -10,6 +11,7 @@ services:
       - "4201:80"
     restart: always
 
+  # /
   clientUI:
     container_name: fe_client_ui
     image: "blablamove/fe-client-ui"
