@@ -1,6 +1,6 @@
 # adminMarketingUI PRODUCTION DOCKERFILE
 # the webserver is listening on port 80
-# the webserver will respond on both / and /marketing/
+# the webserver will respond on /marketing/
 
 FROM node:10.15.1-stretch-slim
 
@@ -20,6 +20,6 @@ RUN npm install
 
 #RUN ng build --prod --build-optimizer
 
-RUN ng build
+RUN ng build --base-href=/marketing/
 
 CMD /usr/sbin/nginx
