@@ -60,4 +60,5 @@ mvn spring-boot:run
 
 ```bash
 npm install && ng serve
+# use -c production after ng serve to use production configuration
 ```

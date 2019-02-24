@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {ConnectionLog} from '../model/connection-log';
-import {ConstantService} from '../constants/constant.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import {ConstantService} from '../constants/constant.service';
 export class DashboardAdminService {
 
 
-  API_URL = this.constant.DASHBOARD_API_URL + '/admin';
+  API_URL = environment.DASHBOARD_API_URL + '/admin';
   GET_LAST_24H_CONNECTIONS = this.API_URL + '/last24Connections';
 
   httpOptions = {
@@ -20,7 +20,7 @@ export class DashboardAdminService {
     }),
   };
 
-  constructor(private http: HttpClient, private constant: ConstantService) {
+  constructor(private http: HttpClient) {
   }
 
   getLast24Connections(): Observable<ConnectionLog[]> {
