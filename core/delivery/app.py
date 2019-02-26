@@ -186,7 +186,7 @@ def post_route(request):
     )
 
     # Send
-    threads_mq["route"].put(message)
+    threads_mq["delivery"].put(message)
     print("route created")
     # Store the route
     routes[uuid_route] = "created"
@@ -215,7 +215,7 @@ def post_route_cancellation(request):
         )
 
         # Send
-        threads_mq["route"].put(message)
+        threads_mq["delivery"].put(message)
 
         # Response with callback url
         return json.dumps(dict(message))
