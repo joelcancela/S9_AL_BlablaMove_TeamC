@@ -140,26 +140,31 @@ def status_route(request):
 # CORE DELIVERY SERVICE ROUTES
 ########################################################################################################################
 
-@app.route("/delivery/item",
-            methods=['POST'])
+
+@app.route("/delivery/item", methods=["POST"])
 def post_delivery_item(request):
     """
     Add an item to a delivery
     :return:
     """
+
     # Build message
-    message, request_id = make_kafka_message(
-        action='DELIVERY_ITEM',
-        message={
-            'delivery_uuid': str(uuid.uuid4()),
-            'item_type': items[randint(0, len(items)-1)],
-            'time': str(datetime.datetime.now().replace(microsecond=0).isoformat()),
-        }
-    )
-    # Send
-    threads_mq['delivery'].put(message)
-    # Response with callback url
-    return json.dumps(dict(message),)
+    initiated_routes = {k: v for k, v in routes.items() if v == "initiated"}
+    if len(initiated_routes) > 0:
+        item_delivered = choice(list(initiated_routes))
+        message, request_id = make_kafka_message(
+            action="DELIVERY_ITEM",
+            message={
+                "delivery_uuid": deliveries[item_delivered],
+                "item_type": items[randint(0, len(items) - 1)],
+                "time": str(datetime.datetime.now().replace(microsecond=0).isoformat()),
+            },
+        )
+        # Send
+        threads_mq["delivery"].put(message)
+        # Response with callback url
+        return json.dumps(dict(message))
+    return "oupsy"
 
 
 @app.route("/delivery/route", methods=["POST"])
