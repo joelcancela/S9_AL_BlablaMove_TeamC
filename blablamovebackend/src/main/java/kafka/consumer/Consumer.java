@@ -127,6 +127,7 @@ public class Consumer {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("delivery_issue").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("issue_type", linkedTreeMap.get("issue_type").toString())
+                .addField("delivery_uuid",linkedTreeMap.get("delivery_uuid").toString())
                 .build();
         saveToInfluxDB(p);
     }
