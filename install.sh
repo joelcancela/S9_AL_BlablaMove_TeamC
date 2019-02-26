@@ -13,7 +13,7 @@ cd ..
 cd ./blablamovebackend
 chmod +x build.sh
 ./build.sh
-cd ..
+cd ../core
 
 # Core
 
@@ -27,4 +27,4 @@ cd ..
 
 cd ./user
 docker build -t blablamove/core-user .
-cd ..
+cd ../..

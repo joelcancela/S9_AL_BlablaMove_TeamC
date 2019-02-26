@@ -5,4 +5,5 @@
  */
 export const environment = {
   production: true,
+  DASHBOARD_API_URL: "http://35.241.194.154:80",
 };

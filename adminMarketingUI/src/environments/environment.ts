@@ -10,4 +10,5 @@
 
 export const environment = {
   production: false,
+  DASHBOARD_API_URL: 'http://localhost:8080',
 };
