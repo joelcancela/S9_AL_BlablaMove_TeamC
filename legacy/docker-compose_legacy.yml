@@ -2,22 +2,22 @@ version: "2.1"
 
 services:
   adminMarketingUI:
-    container_name: al_adminMarketingUI
-    image: "al/fe/admin_marketing_ui"
+    container_name: fe_admin_marketing_ui
+    image: "blablamove/fe-admin-marketing-ui"
     ports:
       - "4201:4200"
     restart: always
 
   clientUI:
-    container_name: al_clientUI
-    image: "al/fe/client_ui"
+    container_name: fe_client_ui
+    image: "blablamove/fe-client-ui"
     ports:
       - "4202:4200"
     restart: always
 
   dashboardService:
-    container_name: al_dashboardService
-    image: "al/ws/dashboardservice"
+    container_name: be_dashboard_service
+    image: "blablamove/be-dashboard-service"
     ports:
       - "8080:8080"
     restart: always
@@ -30,9 +30,21 @@ services:
       - kafka
       - influxdb
 
+  kpi:
+    container_name: core_kpi
+    image: "blablamove/core-kpi"
+    ports:
+      - "5000:5000"
+    depends_on:
+      kafka:
+        condition: service_healthy
+    links:
+      - kafka
+    command: app.py production world
+
   user:
-    container_name: al_user
-    image: "al/fe/core/user"
+    container_name: core_user
+    image: "blablamove/core-user"
     ports:
       - "5001:5000"
     depends_on:
@@ -40,10 +52,11 @@ services:
         condition: service_healthy
     links:
       - kafka
+    command: app.py production world
 
   delivery:
-    container_name: al_delivery
-    image: "al/fe/core/delivery"
+    container_name: core_delivery
+    image: "blablamove/core-delivery"
     ports:
       - "5002:5000"
     depends_on:
@@ -51,6 +64,7 @@ services:
         condition: service_healthy
     links:
       - kafka
+    command: app.py production world
 
   zookeeper:
     image: wurstmeister/zookeeper
