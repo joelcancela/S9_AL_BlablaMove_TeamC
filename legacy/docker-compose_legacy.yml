@@ -5,14 +5,14 @@ services:
     container_name: fe_admin_marketing_ui
     image: "blablamove/fe-admin-marketing-ui"
     ports:
-      - "4201:4200"
+      - "4201:80"
     restart: always
 
   clientUI:
     container_name: fe_client_ui
     image: "blablamove/fe-client-ui"
     ports:
-      - "4202:4200"
+      - "4202:80"
     restart: always
 
   dashboardService:
