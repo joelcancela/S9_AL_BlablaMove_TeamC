@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment';
 import {DeliveryIssue} from '../model/delivery-issue';
 import {RouteCreated} from '../model/route-created';
 import {RouteCanceled} from '../model/route-canceled';
+import { DeliveredItem } from "../model/delivered-item";
 
 @Injectable({
   providedIn: 'root',
@@ -17,7 +18,7 @@ export class DashboardMarketingService {
   GET_ACTIVE_CITIES = this.API_URL + '/cities';
   GET_MOST_ACTIVE_CITIES = this.API_URL + '/mostActiveCities';
   GET_24H_LAST_DELIVERY_ISSUES = this.API_URL + '/last24hDeliveryIssues';
-  GET_24H_LAST_DELIVERED_ITEMS = this.API_URL + '/last24hDeliveredItems'; // TODO:
+  GET_24H_LAST_DELIVERED_ITEMS = this.API_URL + '/last24hDeliveredItems';
   GET_24H_LAST_CREATED_ROUTES = this.API_URL + '/last24hCreatedRoutes';
   GET_24H_LAST_CANCELED_ROUTES = this.API_URL + '/last24hCanceledRoutes';
 
@@ -48,6 +49,10 @@ export class DashboardMarketingService {
 
   getLast24hCanceledRoutes(): Observable<RouteCanceled[]> {
     return this.http.get<RouteCanceled[]>(this.GET_24H_LAST_CANCELED_ROUTES, this.httpOptions);
+  }
+
+  getLast24hDeliveredItems(): Observable<DeliveredItem[]> {
+    return this.http.get<DeliveredItem[]>(this.GET_24H_LAST_DELIVERED_ITEMS, this.httpOptions);
   }
 
 }
