@@ -41,7 +41,7 @@ public class Consumer {
             } else if (msg.getAction().equals("ROUTE_CANCELED")) {
                 storeRouteCanceled(msg);
             } else if (msg.getAction().equals("DELIVERY_ITEM")) {
-            storeDeliveryItem(msg);
+                storeDeliveryItem(msg);
             }
         } catch (JsonSyntaxException e) {
             LOG.error("Error while parsing received message");
@@ -128,6 +128,7 @@ public class Consumer {
         Point p = Point.measurement("delivery_issue").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("issue_type", linkedTreeMap.get("issue_type").toString())
                 .addField("delivery_uuid",linkedTreeMap.get("delivery_uuid").toString())
+                .addField("time", linkedTreeMap.get("time").toString())
                 .build();
         saveToInfluxDB(p);
     }
@@ -156,6 +157,7 @@ public class Consumer {
         LinkedTreeMap linkedTreeMap = (LinkedTreeMap) msg.getMessage();
         Point p = Point.measurement("route_canceled").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("route_uuid", linkedTreeMap.get("route_uuid").toString())
+                .addField("time", linkedTreeMap.get("time").toString())
                 .build();
         saveToInfluxDB(p);
     }
