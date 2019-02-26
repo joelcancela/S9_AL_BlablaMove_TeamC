@@ -13,7 +13,7 @@
       <tr *ngFor="let delivery of deliveredItems">
         <td>{{ delivery.delivery_uuid }}</td>
         <td>{{ delivery.item_type }}</td>
-        <td>{{ delivery.time.toISOString() }}</td>
+        <td>{{ delivery.time }}</td>
       </tr>
       </tbody>
     </table>
