@@ -1,20 +1,20 @@
 export class DeliveredItem {
-  private _item_type: string;
+  private _itemType: string;
   private _delivery_uuid: string;
   private _time: Date;
 
-  constructor(item_type: string, delivery_uuid: string, time: Date) {
-    this._item_type = item_type;
+  constructor(itemType: string, delivery_uuid: string, time: Date) {
+    this._itemType = itemType;
     this._delivery_uuid = delivery_uuid;
     this._time = time;
   }
 
-  get item_type(): string {
-    return this._item_type;
+  get itemType(): string {
+    return this._itemType;
   }
 
-  set item_type(value: string) {
-    this._item_type = value;
+  set itemType(value: string) {
+    this._itemType = value;
   }
 
   get delivery_uuid(): string {
