@@ -34,4 +34,24 @@ public class DeliveredItem {
     public Instant getTime() {
         return time;
     }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
+    }
+
+    public String getDelivery_uuid() {
+        return delivery_uuid;
+    }
+
+    public void setDelivery_uuid(String delivery_uuid) {
+        this.delivery_uuid = delivery_uuid;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
+    }
 }

@@ -48,7 +48,17 @@ routes = {}
 deliveries = {}
 
 cities = {
-    "world": {0: "Nice"},
+    "world": {
+        0: "Marseille",
+        1: "Antibes",
+        2: "Toulon",
+        3: "Aix-en-provence",
+        4: "Nice",
+        5: "London",
+        6: "Bristol",
+        7: "Manchester",
+        8: "Liverpool"
+    },
     "europe-west1-b": {
         0: "Marseille",
         1: "Antibes",
