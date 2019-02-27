@@ -20,7 +20,7 @@ RUN npm install
 
 #RUN ng build --prod --build-optimizer
 
-RUN ng build
+RUN ng build -c production
 
 # flush black hole
 RUN rm -rf ./node_modules

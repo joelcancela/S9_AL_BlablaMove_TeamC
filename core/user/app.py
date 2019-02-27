@@ -26,7 +26,7 @@ __license__ = "MIT"
 __version__ = "2.0"
 __maintainer__ = "Nikita ROUSSEAU"
 __email__ = "nikita.rousseau@etu.unice.fr"
-__status__ = "development"
+__status__ = "stable"
 
 # Web Application
 app = Klein()
@@ -87,7 +87,7 @@ def root_route(request):
 # Health check
 @app.route('/user/healthz')
 def status_route(request):
-    return '200 OK'
+    return '[' + region + '] ' + __product__ + ' version ' + __version__ + ' (' + env + ') is running.'
 
 
 ########################################################################################################################
