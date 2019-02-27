@@ -20,7 +20,7 @@ RUN npm install
 
 #RUN ng build --prod --build-optimizer --base-href=/marketingui/
 
-RUN ng build --base-href=/marketingui/
+RUN ng build --base-href=/marketingui/ -c production
 
 # flush black hole
 RUN rm -rf ./node_modules
