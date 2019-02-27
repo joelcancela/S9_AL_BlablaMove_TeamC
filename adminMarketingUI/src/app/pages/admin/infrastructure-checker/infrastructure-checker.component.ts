@@ -21,6 +21,7 @@ export class InfrastructureCheckerComponent implements OnInit {
   seconds_to_update = 10;
 
   constructor(private heartBeatService: HeartbeatService) {
+    this.refreshHeartbeatStatus();
     setInterval(() => {
       this.refreshHeartbeatStatus();
     }, 10000);
@@ -36,28 +37,28 @@ export class InfrastructureCheckerComponent implements OnInit {
   }
 
   refreshHeartbeatStatus() {
+    const this_ = this;
     this.heartBeatService.getHeartbeats().then(result => {
-      this.backend_running = RunningStatus.Stopped;
-      this.fr_core_delivery_running = RunningStatus.Unknown;
-      this.fr_core_KPI_running = RunningStatus.Unknown;
-      this.fr_core_user_running = RunningStatus.Unknown;
-      this.uk_core_delivery_running = RunningStatus.Unknown;
-      this.uk_core_KPI_running = RunningStatus.Unknown;
-      this.uk_core_user_running = RunningStatus.Unknown;
+      this_.backend_running = RunningStatus.Stopped;
+      this_.fr_core_delivery_running = RunningStatus.Unknown;
+      this_.fr_core_KPI_running = RunningStatus.Unknown;
+      this_.fr_core_user_running = RunningStatus.Unknown;
+      this_.uk_core_delivery_running = RunningStatus.Unknown;
+      this_.uk_core_KPI_running = RunningStatus.Unknown;
+      this_.uk_core_user_running = RunningStatus.Unknown;
       const arrayResult = result as Array<any>;
-      const this_ = this;
       if (arrayResult.length > 0) {
-        this.backend_running = RunningStatus.Running;
+        this_.backend_running = RunningStatus.Running;
         arrayResult.forEach(function (element) {
           if (element.service_name === 'Core Delivery') {
             const time = Date.parse(element.time);
             const diffSecs = Math.round(Date.now() - time) / 1000;
             if (diffSecs > 10) {
               if (element.region != undefined) {
-                if (element.region == this.fr_indicator) {
+                if (element.region == this_.fr_indicator) {
                   this_.fr_core_delivery_running = RunningStatus.Stopped;
 
-                } else if (element.region == this.uk_indicator) {
+                } else if (element.region == this_.uk_indicator) {
                   this_.uk_core_delivery_running = RunningStatus.Stopped;
 
                 } else {
@@ -67,10 +68,10 @@ export class InfrastructureCheckerComponent implements OnInit {
               }
             } else {
               if (element.region != undefined) {
-                if (element.region == this.fr_indicator) {
+                if (element.region == this_.fr_indicator) {
                   this_.fr_core_delivery_running = RunningStatus.Running;
 
-                } else if (element.region == this.uk_indicator) {
+                } else if (element.region == this_.uk_indicator) {
                   this_.uk_core_delivery_running = RunningStatus.Running;
 
                 } else {
@@ -84,10 +85,10 @@ export class InfrastructureCheckerComponent implements OnInit {
             const diffSecs = Math.round(Date.now() - time) / 1000;
             if (diffSecs > 10) {
               if (element.region != undefined) {
-                if (element.region == this.fr_indicator) {
+                if (element.region == this_.fr_indicator) {
                   this_.fr_core_user_running = RunningStatus.Stopped;
 
-                } else if (element.region == this.uk_indicator) {
+                } else if (element.region == this_.uk_indicator) {
                   this_.uk_core_user_running = RunningStatus.Stopped;
 
                 } else {
@@ -97,10 +98,10 @@ export class InfrastructureCheckerComponent implements OnInit {
               }
             } else {
               if (element.region != undefined) {
-                if (element.region == this.fr_indicator) {
+                if (element.region == this_.fr_indicator) {
                   this_.fr_core_user_running = RunningStatus.Running;
 
-                } else if (element.region == this.uk_indicator) {
+                } else if (element.region == this_.uk_indicator) {
                   this_.uk_core_user_running = RunningStatus.Running;
 
                 } else {
@@ -114,10 +115,10 @@ export class InfrastructureCheckerComponent implements OnInit {
             const diffSecs = Math.round(Date.now() - time) / 1000;
             if (diffSecs > 10) {
               if (element.region != undefined) {
-                if (element.region == this.fr_indicator) {
+                if (element.region == this_.fr_indicator) {
                   this_.fr_core_KPI_running = RunningStatus.Stopped;
 
-                } else if (element.region == this.uk_indicator) {
+                } else if (element.region == this_.uk_indicator) {
                   this_.uk_core_KPI_running = RunningStatus.Stopped;
 
                 } else {
@@ -127,10 +128,10 @@ export class InfrastructureCheckerComponent implements OnInit {
               }
             } else {
               if (element.region != undefined) {
-                if (element.region == this.fr_indicator) {
+                if (element.region == this_.fr_indicator) {
                   this_.fr_core_KPI_running = RunningStatus.Running;
 
-                } else if (element.region == this.uk_indicator) {
+                } else if (element.region == this_.uk_indicator) {
                   this_.uk_core_KPI_running = RunningStatus.Running;
 
                 } else {
@@ -143,13 +144,13 @@ export class InfrastructureCheckerComponent implements OnInit {
         });
       }
     }, error => {
-      this.backend_running = RunningStatus.Stopped;
-      this.fr_core_delivery_running = RunningStatus.Unknown;
-      this.fr_core_KPI_running = RunningStatus.Unknown;
-      this.fr_core_user_running = RunningStatus.Unknown;
-      this.uk_core_delivery_running = RunningStatus.Unknown;
-      this.uk_core_KPI_running = RunningStatus.Unknown;
-      this.uk_core_user_running = RunningStatus.Unknown;
+      this_.backend_running = RunningStatus.Stopped;
+      this_.fr_core_delivery_running = RunningStatus.Unknown;
+      this_.fr_core_KPI_running = RunningStatus.Unknown;
+      this_.fr_core_user_running = RunningStatus.Unknown;
+      this_.uk_core_delivery_running = RunningStatus.Unknown;
+      this_.uk_core_KPI_running = RunningStatus.Unknown;
+      this_.uk_core_user_running = RunningStatus.Unknown;
     });
   }
 
