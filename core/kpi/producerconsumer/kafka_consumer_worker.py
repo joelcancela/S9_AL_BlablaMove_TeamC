@@ -11,6 +11,7 @@ def kafka_consumer_worker(
         t_stop_event: threading.Event,
         bootstrap_servers: str,
         topic: str,
+        region: str,
         service_name: str,
         threads_mq: dict):
     """
@@ -19,10 +20,15 @@ def kafka_consumer_worker(
     :param t_stop_event: threading.Event
     :param bootstrap_servers: str
     :param topic: str
+    :param region:
     :param service_name: str
     :param threads_mq: dict
     :return:
     """
+
+    # region
+    if len(region) == 0:
+        region = "world"
 
     # Client
     consumer = KafkaConsumer(topic,
@@ -54,6 +60,7 @@ def kafka_consumer_worker(
                         action='HEARTBEAT_REPLY',
                         message={
                             'service_name': str(service_name),
+                            'region': str(region),
                             'timestamp': int(datetime.datetime.now().timestamp())
                         }
                     )

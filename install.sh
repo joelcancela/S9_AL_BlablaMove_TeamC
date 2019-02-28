@@ -1,11 +1,30 @@
 #!/bin/bash
-cd adminMarketingUI
-docker build -t al/fe/admin_marketing_ui .
-cd ../blablamovebackend
-./compile.sh
-cd ../clientUI
-docker build -t al/fe/client_ui .
-cd ../core/delivery
-docker build -t al/fe/core/delivery .
-cd ../user
-docker build -t al/fe/core/user .
+
+# J2E FE/BE
+
+cd ./adminMarketingUI
+docker build -t blablamove/fe-admin-marketing-ui .
+cd ..
+
+cd ./clientUI
+docker build -t blablamove/fe-client-ui .
+cd ..
+
+cd ./blablamovebackend
+chmod +x build.sh
+./build.sh
+cd ../core
+
+# Core
+
+cd ./kpi
+docker build -t blablamove/core-kpi .
+cd ..
+
+cd ./delivery
+docker build -t blablamove/core-delivery .
+cd ..
+
+cd ./user
+docker build -t blablamove/core-user .
+cd ../..

@@ -2,6 +2,8 @@ package fr.polytech.unice.blablamove.teamc.blablamovebackend.webservice;
 
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.BlablamovebackendApplication;
 import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.DeliveryIssue;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCanceled;
+import fr.polytech.unice.blablamove.teamc.blablamovebackend.model.influxdb.RouteCreated;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.junit.Before;
@@ -37,32 +39,86 @@ public class MarketingWSTest {
                 .addField("time", System.currentTimeMillis())
                 .build();
         BlablamovebackendApplication.influxDB.write(p);
+        TimeUnit.SECONDS.sleep(1);
+
 
         p = Point.measurement("delivery_issue").time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
                 .addField("issue_type", "test")
                 .addField("time", System.currentTimeMillis())
                 .build();
         BlablamovebackendApplication.influxDB.write(p);
+        TimeUnit.SECONDS.sleep(1);
+
 
         p = Point.measurement("delivery_issue").time(LocalDateTime.now().minusDays(2).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
                 .addField("issue_type", "test")
                 .addField("time", LocalDateTime.now().minusDays(2).toString())
                 .build();
-
         BlablamovebackendApplication.influxDB.write(p);
 
-        queryObject = new Query("Select * from delivery_issue", "blablamove");
-        BlablamovebackendApplication.influxDB.query(queryObject);
-    }
+        TimeUnit.SECONDS.sleep(1);
 
+        p = Point.measurement("route_created").time(LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("route_uuid", "test")
+                .addField("time", System.currentTimeMillis())
+                .build();
+        BlablamovebackendApplication.influxDB.write(p);
+        TimeUnit.SECONDS.sleep(1);
+
+
+        p = Point.measurement("route_created").time(LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("route_uuid", "test")
+                .addField("time", System.currentTimeMillis())
+                .build();
+        BlablamovebackendApplication.influxDB.write(p);
+
+        TimeUnit.SECONDS.sleep(1);
+
+        p = Point.measurement("route_created").time(LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("route_uuid", "test")
+                .addField("time", LocalDateTime.now().minusDays(2).toString())
+                .build();
+        BlablamovebackendApplication.influxDB.write(p);
+
+        TimeUnit.SECONDS.sleep(1);
+
+        p = Point.measurement("route_canceled").time(LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("route_uuid", "test")
+                .addField("time", System.currentTimeMillis())
+                .build();
+        BlablamovebackendApplication.influxDB.write(p);
+
+        TimeUnit.SECONDS.sleep(1);
+
+        p = Point.measurement("route_canceled").time(LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("route_uuid", "test")
+                .addField("time", System.currentTimeMillis())
+                .build();
+        BlablamovebackendApplication.influxDB.write(p);
+
+        TimeUnit.SECONDS.sleep(1);
+
+        p = Point.measurement("route_canceled").time(LocalDateTime.now().minusDays(1).toEpochSecond(ZoneOffset.UTC), TimeUnit.SECONDS)
+                .addField("route_uuid", "test")
+                .addField("time", LocalDateTime.now().minusDays(2).toString())
+                .build();
+        BlablamovebackendApplication.influxDB.write(p);
+    }
     @Ignore
     @Test
-    public void getDeliveryIssuesTest() {
+    public void marketingWSTest() {
         MarketingWS marketingWS = new MarketingWS();
         List<DeliveryIssue> deliveries = marketingWS.getLast24hDeliveryIssues();
-        assertEquals(deliveries.size(),2);
+        assertEquals(2, deliveries.size());
 
-        deliveries = marketingWS.getIssuesByTimeframe(Date.from(LocalDateTime.now().minusDays(3).toInstant(ZoneOffset.UTC)), Date.from(LocalDateTime.now().toInstant(ZoneOffset.UTC)));
-        assertEquals(deliveries.size(),3);
+        deliveries = marketingWS.getIssuesByTimeframe(Date.from(LocalDateTime.now().minusDays(3).toInstant(ZoneOffset.UTC)), Date.from(LocalDateTime.now().plusDays(2).toInstant(ZoneOffset.UTC)));
+        assertEquals(3, deliveries.size());
+
+        List<RouteCreated> routesCreated = marketingWS.getRoutesCreatedByTimeframe(Date.from(LocalDateTime.now().minusDays(3).toInstant(ZoneOffset.UTC)), Date.from(LocalDateTime.now().plusDays(2).toInstant(ZoneOffset.UTC)));
+        assertEquals(3, routesCreated.size());
+
+        List<RouteCanceled> routesCanceled = marketingWS.getRoutesCanceledByTimeframe(Date.from(LocalDateTime.now().minusDays(3).toInstant(ZoneOffset.UTC)), Date.from(LocalDateTime.now().plusDays(2).toInstant(ZoneOffset.UTC)));
+        System.out.println(routesCanceled);
+        assertEquals(3, routesCanceled.size());
     }
 }

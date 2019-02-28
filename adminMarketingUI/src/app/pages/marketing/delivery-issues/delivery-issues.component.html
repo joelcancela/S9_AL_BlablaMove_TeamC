@@ -1,0 +1,21 @@
+<nb-card>
+  <nb-card-header>Last 24h delivery issues</nb-card-header>
+  <nb-card-body>
+    <table id="table" class="table table-hover" cellspacing="0">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Issue type</th>
+        <th>Time</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let issue of deliveryIssues">
+        <td>{{ issue.delivery_uuid }}</td>
+        <td>{{ issue.issueType }}</td>
+        <td>{{ issue.time }}</td>
+      </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
+</nb-card>

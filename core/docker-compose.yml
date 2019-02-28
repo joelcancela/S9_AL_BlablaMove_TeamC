@@ -1,0 +1,30 @@
+# Core Composition
+version: "2.1"
+
+services:
+  kpi:
+    container_name: core_kpi
+    image: "blablamove/core-kpi"
+    ports:
+      - "5000:5000"
+    extra_hosts:
+      - "kafka:10.132.0.2"
+    command: app.py production world
+
+  user:
+    container_name: core_user
+    image: "blablamove/core-user"
+    ports:
+      - "5001:5000"
+    extra_hosts:
+      - "kafka:10.132.0.2"
+    command: app.py production world
+
+  delivery:
+    container_name: core_delivery
+    image: "blablamove/core-delivery"
+    ports:
+      - "5002:5000"
+    extra_hosts:
+      - "kafka:10.132.0.2"
+    command: app.py production world

@@ -35,6 +35,15 @@ export class HeatmapComponent implements OnInit {
     this.marketingService.getActiveCities().subscribe(cities => cities.forEach(function (city) {
       parentThis.addMarkerForCity(city);
     }));
+    setInterval(function () {// TODO: test auto-refresh
+      parentThis.markers.length = 0;
+      parentThis.marketingService.getMostActiveCities().subscribe(cities => cities.forEach(function (cityReport) {
+        parentThis.addHeatmapForCity(cityReport);
+      }));
+      parentThis.marketingService.getActiveCities().subscribe(cities => cities.forEach(function (city) {
+        parentThis.addMarkerForCity(city);
+      }));
+    }, 3000);
   }
 
   addMarkerForCity(city: City) {

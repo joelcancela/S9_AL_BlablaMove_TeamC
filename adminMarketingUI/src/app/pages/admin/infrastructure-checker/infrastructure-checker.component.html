@@ -1,0 +1,30 @@
+<ul>
+  <li><span class="badge" [ngClass]="{'badge-success': backend_running==0, 'badge-danger': backend_running==1}">{{getStatusName(backend_running)}}</span> Blablamove Backend</li>
+  <li>
+    <span class="badge badge-default">France <span class="flag-icon flag-icon-fr"></span></span>
+    <ul>
+      <li><span class="badge" [ngClass]="{'badge-success': fr_core_delivery_running==0, 'badge-danger': fr_core_delivery_running==1, 'badge-warning': fr_core_delivery_running==2}">{{getStatusName(fr_core_delivery_running)}}</span> Blablamove Core Delivery
+        WS
+      </li>
+      <li><span class="badge" [ngClass]="{'badge-success': fr_core_KPI_running==0, 'badge-danger': fr_core_KPI_running==1, 'badge-warning': fr_core_KPI_running==2}">{{getStatusName(fr_core_KPI_running)}}</span> Blablamove Core KPI WS</li>
+      <li><span class="badge" [ngClass]="{'badge-success': fr_core_user_running==0, 'badge-danger': fr_core_user_running==1, 'badge-warning': fr_core_user_running==2}">{{getStatusName(fr_core_user_running)}}</span> Blablamove Core User WS</li>
+    </ul>
+  </li>
+  <li>
+    <span class="badge badge-default">UK <span class="flag-icon flag-icon-gb"></span></span>
+    <ul>
+      <li><span class="badge" [ngClass]="{'badge-success': uk_core_delivery_running==0, 'badge-danger': uk_core_delivery_running==1, 'badge-warning': uk_core_delivery_running==2}">{{getStatusName(uk_core_delivery_running)}}</span> Blablamove Core Delivery
+        WS
+      </li>
+      <li><span class="badge" [ngClass]="{'badge-success': uk_core_KPI_running==0, 'badge-danger': uk_core_KPI_running==1, 'badge-warning': uk_core_KPI_running==2}">{{getStatusName(uk_core_KPI_running)}}</span> Blablamove Core KPI WS</li>
+      <li><span class="badge" [ngClass]="{'badge-success': uk_core_user_running==0, 'badge-danger': uk_core_user_running==1, 'badge-warning': uk_core_user_running==2}">{{getStatusName(uk_core_user_running)}}</span> Blablamove Core User WS</li>
+    </ul>
+  </li>
+</ul>
+<br>
+<span [hidden]="seconds_to_update==0">Updating in {{seconds_to_update}} seconds...</span>
+<span [hidden]="seconds_to_update!=0">Refreshing statuses</span>
+
+
+
+

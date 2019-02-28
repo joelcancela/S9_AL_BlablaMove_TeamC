@@ -1,4 +1,4 @@
-import { NbMenuItem } from '@nebular/theme';
+import {NbMenuItem} from '@nebular/theme';
 
 export const MENU_ITEMS: NbMenuItem[] = [
   {
@@ -15,31 +15,26 @@ export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Marketing',
     icon: 'fa fa-eur',
-    link: '/pages/marketing',
-  },
-  {
-    title: 'FEATURES',
-    group: true,
-  },
-  {
-    title: 'Auth',
-    icon: 'nb-locked',
     children: [
       {
-        title: 'Login',
-        link: '/auth/login',
+        title: 'Most active cities',
+        link: '/pages/marketing-most-active-cities',
       },
       {
-        title: 'Register',
-        link: '/auth/register',
+        title: 'Last 24h created routes',
+        link: '/pages/marketing-created-routes',
       },
       {
-        title: 'Request Password',
-        link: '/auth/request-password',
+        title: 'Last 24h canceled routes',
+        link: '/pages/marketing-canceled-routes',
       },
       {
-        title: 'Reset Password',
-        link: '/auth/reset-password',
+        title: 'Last 24h delivered items',
+        link: '/pages/marketing-delivered-items',
+      },
+      {
+        title: 'Last 24h delivery issues',
+        link: '/pages/marketing-delivery-issues',
       },
     ],
   },

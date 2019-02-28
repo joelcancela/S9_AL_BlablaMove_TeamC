@@ -19,8 +19,17 @@ public class DeliveryInitiated {
 	@Column(name = "city")
 	private String city;
 
+	/**
+	 * The id of this delivery.
+	 */
 	@Column(name = "delivery_uuid")
 	private String delivery_uuid;
+
+	/**
+	 * The id of this route.
+	 */
+	@Column(name = "route_uuid")
+	private String route_uuid;
 
 	public Instant getTime() {
 		return time;

@@ -1,9 +1,13 @@
 package fr.polytech.unice.blablamove.teamc.blablamovebackend.config;
 
+
 import kafka.consumer.Consumer;
+import kafka.consumer.Message;
 import kafka.producer.Sender;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -11,12 +15,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
-import org.springframework.kafka.core.ConsumerFactory;
-import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
+import org.springframework.kafka.core.*;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -73,6 +77,23 @@ public class AppConfig extends WebMvcConfigurerAdapter {
 		ConcurrentKafkaListenerContainerFactory<String, String> factory = new ConcurrentKafkaListenerContainerFactory<>();
 		factory.setConsumerFactory(consumerFactory("groupID"));
 		return factory;
+	}
+
+	//Producer
+
+
+	@Bean
+	public ProducerFactory<String, Message> messageProducerFactory() {
+		Map<String, Object> configProps = new HashMap<>();
+		configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+		configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+		configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+		return new DefaultKafkaProducerFactory<>(configProps);
+	}
+
+	@Bean
+	public KafkaTemplate<String, Message> messageKafkaTemplate() {
+		return new KafkaTemplate<>(messageProducerFactory());
 	}
 
 }

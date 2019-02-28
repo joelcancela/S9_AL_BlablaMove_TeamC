@@ -19,6 +19,11 @@ public class DeliveryIssue {
     @Column(name = "issue_type")
     private String issueType;
 
+    /**
+     * The id of this delivery.
+     */
+    @Column(name = "delivery_uuid")
+    private String delivery_uuid;
 
     /**
      * The time at which the issue happened.
@@ -28,5 +33,25 @@ public class DeliveryIssue {
 
     public Instant getTime() {
         return time;
+    }
+
+    public String getIssueType() {
+        return issueType;
+    }
+
+    public void setIssueType(String issueType) {
+        this.issueType = issueType;
+    }
+
+    public String getDelivery_uuid() {
+        return delivery_uuid;
+    }
+
+    public void setDelivery_uuid(String delivery_uuid) {
+        this.delivery_uuid = delivery_uuid;
+    }
+
+    public void setTime(Instant time) {
+        this.time = time;
     }
 }

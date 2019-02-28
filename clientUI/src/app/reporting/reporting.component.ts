@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
-import {BlablaMoveStatusAPIService} from '../service/blablamove-status-api.service';
-import {forEach} from '@angular/router/src/utils/collection';
+import { Component, OnInit } from '@angular/core';
+import { BlablaMoveStatusAPIService } from '../service/blablamove-status-api.service';
+import { forEach } from '@angular/router/src/utils/collection';
 
 @Component({
   selector: 'app-reporting',
@@ -9,7 +9,7 @@ import {forEach} from '@angular/router/src/utils/collection';
 })
 export class ReportingComponent implements OnInit {
 
-  timeOptions = {hour: '2-digit', minute: '2-digit'};
+  timeOptions = { hour: '2-digit', minute: '2-digit' };
   // ngx-charts-line-chart options
   data = [
     {
@@ -38,6 +38,7 @@ export class ReportingComponent implements OnInit {
   autoScale = true;
   lastHourProblems = 0;
   lastUpdate = null;
+  reportSent = false;
 
   // line, area
   constructor(private apiService: BlablaMoveStatusAPIService) {
@@ -87,7 +88,11 @@ export class ReportingComponent implements OnInit {
   }
 
   reportProblem() {
-    this.apiService.postIssue().subscribe(response => console.log(response));
+    this.apiService.postIssue().subscribe(response => {
+      this.reportSent = true;
+      const parentThis = this;
+      setTimeout(function () { parentThis.reportSent = false; }, 3000);
+    });
   }
 
 }

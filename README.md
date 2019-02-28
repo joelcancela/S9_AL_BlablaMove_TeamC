@@ -60,4 +60,13 @@ mvn spring-boot:run
 
 ```bash
 npm install && ng serve
+# use -c production after ng serve to use production configuration
+```
+
+### Local deploy
+
+```bash
+docker rm $(docker ps -a -q)
+cd legacy
+docker-compose -f docker-compose_legacy.yml up --force-recreate
 ```
