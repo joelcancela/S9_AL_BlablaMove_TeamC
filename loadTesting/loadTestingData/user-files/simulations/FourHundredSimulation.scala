@@ -4,7 +4,7 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 import scala.concurrent.duration._
 
-class 400kSimulation extends Simulation {
+class FourHundredSimulation extends Simulation {
   val baseURL = http.baseURL("http://www.nirousseau.ovh")
   val delivery = scenario("delivery cycle").exec(Simulations.delivery)
   setUp(delivery.inject(rampUsersPerSec(20) to 20000 during (20 seconds) randomized,)).protocols(baseURL)
@@ -22,11 +22,11 @@ object Simulations {
                   .post("/delivery"))
                   .pause(1)
                   .randomSwitch(
-                    60d -> .exec(http("Delivery item")
+                    60d -> exec(http("Delivery item")
                             .post("/delivery/item")),
-                    20d ->   .exec(http("Delivery issue")
+                    20d ->  exec(http("Delivery issue")
                             .post("/delivery/issue")),
-                    20d -> .exec(http("Delivery canceled")
+                    20d -> exec(http("Delivery canceled")
                             .delete("/delivery/route"))
                   )
 }
