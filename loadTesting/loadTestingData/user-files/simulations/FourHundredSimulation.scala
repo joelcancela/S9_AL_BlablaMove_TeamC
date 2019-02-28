@@ -7,11 +7,10 @@ import scala.concurrent.duration._
 class FourHundredSimulation extends Simulation {
   val baseURL = http.baseURL("http://www.nirousseau.ovh")
   val delivery = scenario("delivery cycle").exec(Simulations.delivery)
-  setUp(delivery.inject(rampUsersPerSec(20) to 20000 during (20 seconds) randomized,)).protocols(baseURL)
+  setUp(delivery.inject(rampUsersPerSec(20) to 20000 during (20 seconds) randomized)).protocols(baseURL)
 }
 
 object Simulations {
-
   val delivery = exec(http("Login")
                   .post("/user/login"))
                   .pause(3)
