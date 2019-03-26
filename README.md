@@ -1,11 +1,14 @@
-# AL Project: BlablaMove
+# S.A. Project: BlablaMove
 
 BlablaMove helps students move for cheap by using space onboard other people cars to move their goods and furniture as a swarm as those other people drive around. Participants trade points for car space. Points can be use to move their own goods later on. Short trips are combined together to form a longer delivery service.
 
 Our group focuses in a variant about system monitoring. The main objectives were :
 
-- Track events.
-- Create a monitoring dashboard (system and business).
+- Track events (system and business).
+- Create an appropriate dashboard.
+- Try to make the app scalable as much as possible
+- Measure response time perceived by the user and suggest strategies to contain it.
+- Zoning: UK people move in July, rest of the Europe in August
 
 ## Getting Started
 
@@ -17,12 +20,24 @@ Our group focuses in a variant about system monitoring. The main objectives were
 
 ```bash
 ./install.sh # Builds docker images
-docker-compose up
-./load.sh # (Optional) Launches load testing using Gatling
+cd legacy
+docker-compose -f docker-compose_legacy.yml up
+# In a new terminal
+cd ..
+./load.sh # (Optional) Launches load testing using Gatling and creates some random data (user connections, transactions)
 ```
 
-- Go to [localhost:4201](localhost:4201), to use the admin and marketing UI (BlablaMove internal dashboard).
-- Go to [localhost:4202](localhost:4202), to use the client UI (BlablaMove status public website), inspired by [downdetector.com](https://downdetector.com/status/reddit)
+- Go to [localhost:4201](http://localhost:4201), to use the admin and marketing UI (BlablaMove internal dashboard).
+- Go to [localhost:4202](http://localhost:4202), to use the client UI (BlablaMove status public website), inspired by [downdetector.com](https://downdetector.com/status/reddit)
+
+---
+
+### API
+
+In the folder ```core```, in every subfolder (```delivery```, ```kpi```, ```user```), there's a ```swagger.yaml```.
+Otherwise you can read every ```app.py```, next to every annotation ```@app.route``` every route is declared.
+
+---
 
 ## Build separately
 
@@ -60,13 +75,5 @@ mvn spring-boot:run
 
 ```bash
 npm install && ng serve
-# use -c production after ng serve to use production configuration
-```
-
-### Local deploy
-
-```bash
-docker rm $(docker ps -a -q)
-cd legacy
-docker-compose -f docker-compose_legacy.yml up --force-recreate
+# add '-c production' argument after ng serve to use production configuration
 ```
